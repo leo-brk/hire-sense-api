@@ -42,19 +42,6 @@ This project is proprietary software owned by XYZ Company. For more information,
     mvn checkstyle:check
 ```
 
-#### What has been configured in this application ?
-* Exception Handling
-* Validation
-* Authentication and Authorization
-* Response object and Page object
-* Utilities
-    * Date conversion utility
-    * Base64Processor
-* Swagger Configuration
-* Linting
-* Test environment
-* CI/CD
-
 ### Who do I talk to? ###
 * Product Owner: [Leotrim Vojvoda](mailto:leotrim.vojvoda@boreksolutions.de)
 
