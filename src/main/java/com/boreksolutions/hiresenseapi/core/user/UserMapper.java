@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    //@Mapping(target = "isEnabled", expression = "java(true)")
+    @Mapping(target = "enabled", expression = "java(true)")
     @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE)
     User dtoToEntity(CreateUser createUser);
 

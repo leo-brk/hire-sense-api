@@ -20,5 +20,5 @@ public interface UserService {
 
     void updateUser(UserDto userDto);
 
-    Boolean existsByEmail(String email);
+    boolean existsByEmail(String email);
 }
