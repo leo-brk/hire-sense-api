@@ -3,7 +3,6 @@ package com.boreksolutions.hiresenseapi.core.user;
 import com.boreksolutions.hiresenseapi.core.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
-
 import lombok.Setter;
 
 @Getter
