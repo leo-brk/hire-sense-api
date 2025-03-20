@@ -42,7 +42,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void updateCompany(CompanyDto companyDto) {
+    public void updateCompany( CompanyDto companyDto) {
         Company company = companyRepository.findById(companyDto.getId())
                 .orElseThrow(() -> new RuntimeException("Company not found with ID: " + companyDto.getId()));
         companyMapper.updateDtoToEntity(companyDto, company);
