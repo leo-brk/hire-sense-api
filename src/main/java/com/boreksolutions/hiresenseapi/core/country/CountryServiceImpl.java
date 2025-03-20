@@ -4,6 +4,9 @@ import com.boreksolutions.hiresenseapi.core.country.dto.request.CreateCountry;
 import com.boreksolutions.hiresenseapi.core.country.dto.response.CountryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -18,14 +21,18 @@ public class CountryServiceImpl implements CountryService {
         Country savedCountry = countryRepository.save(country);
         return countryMapper.toDto(savedCountry);
     }
-
     @Override
     public CountryDto getCountryById(Long id) {
         Country country = countryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Country not found with ID: " + id));
         return countryMapper.toDto(country);
     }
-
+    @Override
+    public List<CountryDto> getAllCountries() {
+        return countryRepository.findAll().stream()
+                .map(countryMapper::toDto)
+                .collect(Collectors.toList());
+    }
     @Override
     public CountryDto updateCountry(Long id, CreateCountry updateCountry) {
         Country country = countryRepository.findById(id)
@@ -34,7 +41,6 @@ public class CountryServiceImpl implements CountryService {
         Country updatedCountry = countryRepository.save(country);
         return countryMapper.toDto(updatedCountry);
     }
-
     @Override
     public void deleteCountry(Long id) {
         if (!countryRepository.existsById(id)) {
