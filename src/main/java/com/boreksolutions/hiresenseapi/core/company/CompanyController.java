@@ -3,14 +3,11 @@ package com.boreksolutions.hiresenseapi.core.company;
 import com.boreksolutions.hiresenseapi.common.PageObject;
 import com.boreksolutions.hiresenseapi.core.company.dto.response.CompanyDto;
 import com.boreksolutions.hiresenseapi.core.company.dto.request.CreateCompany;
-import com.boreksolutions.hiresenseapi.core.user.dto.response.UserDto;
-import com.boreksolutions.hiresenseapi.core.industry.dto.response.IndustryDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/company")
@@ -45,12 +42,6 @@ public class CompanyController {
         companyService.updateCompany(companyDto);
         return ResponseEntity.noContent().build();
     }
-//    @PutMapping("/{id}")
-//    public ResponseEntity<CompanyDto> updateCompany(
-//        @PathVariable Long id, @Valid @RequestBody CreateCompany updateCompany) {
-//    CompanyDto companyDto = companyService.updateCompany(id, updateCompany);
-//    return new ResponseEntity<>(companyDto, HttpStatus.OK);
-//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCompany(@PathVariable Long id) {
