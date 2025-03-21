@@ -43,6 +43,7 @@ public class CompanyController {
         return ResponseEntity.noContent().build();
     }
 
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCompany(@PathVariable Long id) {
         companyService.deleteCompanyById(id);
