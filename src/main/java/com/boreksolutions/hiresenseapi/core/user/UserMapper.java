@@ -21,6 +21,9 @@ public interface UserMapper {
     PageObject<UserDto> pageToPageObject(Page<User> page);
 
     @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE)
+    @Mapping(target = "email", ignore = true)
+    @Mapping(target = "role", ignore = true)
+    @Mapping(target = "enabled", ignore = true)
     void updateDtoToEntity(UserDto source, @MappingTarget User target);
 
     UserDto entityToDto(User user);

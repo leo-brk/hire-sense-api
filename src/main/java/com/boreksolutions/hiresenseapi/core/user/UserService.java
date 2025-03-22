@@ -2,6 +2,7 @@ package com.boreksolutions.hiresenseapi.core.user;
 
 import com.boreksolutions.hiresenseapi.common.PageObject;
 import com.boreksolutions.hiresenseapi.core.user.dto.request.CreateUser;
+import com.boreksolutions.hiresenseapi.core.user.dto.request.UserFilter;
 import com.boreksolutions.hiresenseapi.core.user.dto.response.UserDto;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -12,15 +13,11 @@ public interface UserService {
 
     UserDto findUserById(Long id);
 
-    UserDto findUserByEmail(String email);
-
-    PageObject<UserDto> getUsersPage(Pageable pageable);
+    PageObject<UserDto> filter(UserFilter filter, Pageable pageable);
 
     void deleteUserById(Long id);
 
     void updateUser(UserDto userDto);
-
-    boolean existsByEmail(String email);
 }
 
 

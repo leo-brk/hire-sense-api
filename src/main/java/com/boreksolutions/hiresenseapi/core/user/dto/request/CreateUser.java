@@ -29,9 +29,6 @@ public class CreateUser {
     @Size(min = 3, max = 18, message = "Password must be between 3 and 18 characters long")
     String password;
 
-    private boolean isEnabled;
-
     @NotNull(message = "Role cannot be null")
     private Role role;
-
 }
