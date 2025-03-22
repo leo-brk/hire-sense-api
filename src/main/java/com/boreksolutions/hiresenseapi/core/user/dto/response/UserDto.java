@@ -22,5 +22,5 @@ public class UserDto {
 
     private Role role;
 
-    private Boolean isEnabled;
+    private boolean enabled;
 }
