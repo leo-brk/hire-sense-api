@@ -5,7 +5,7 @@ and also general information about some built tools and plugins that are used.
 
 ## License
 
-This project is proprietary software owned by Borek Solutions Group. For more information, please see the [LICENSE](./LICENSE) file.
+This project is proprietary software owned by Borek Solutions Group. For more information, please see the [LICENSE](LICENSE.md) file.
 
 ### What is this repository for? ###
 
