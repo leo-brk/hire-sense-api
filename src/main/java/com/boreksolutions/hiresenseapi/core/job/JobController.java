@@ -30,13 +30,8 @@ public class JobController {
 
       @PostMapping("/filter")
       public ResponseEntity<Page<JobDto>> filterJobs(
-            @RequestBody(required = false) JobFilter filter,
+            @RequestBody() JobFilter filter,
             Pageable pageable) {
-
-        if (filter == null) {
-            filter = new JobFilter();
-        }
-
       Page<JobDto> jobs = jobService.filterJobs(filter, pageable);
     return ResponseEntity.ok(jobs);
 }
