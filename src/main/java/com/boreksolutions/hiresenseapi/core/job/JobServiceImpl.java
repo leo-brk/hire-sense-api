@@ -1,5 +1,7 @@
 package com.boreksolutions.hiresenseapi.core.job;
 
+import com.boreksolutions.hiresenseapi.common.PageObject;
+import com.boreksolutions.hiresenseapi.core.job.dto.request.JobFilter;
 import com.boreksolutions.hiresenseapi.core.job.dto.request.CreateJob;
 import com.boreksolutions.hiresenseapi.core.job.dto.response.JobDto;
 import com.boreksolutions.hiresenseapi.core.city.City;
@@ -11,6 +13,8 @@ import com.boreksolutions.hiresenseapi.core.industry.IndustryRepository;
 import com.boreksolutions.hiresenseapi.core.user.User;
 import com.boreksolutions.hiresenseapi.core.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +30,7 @@ public class JobServiceImpl implements JobService {
     private final CompanyRepository companyRepository;
     private final CityRepository cityRepository;
     private final JobMapper jobMapper;
+    private final JobCriteriaBuilder jobCriteriaBuilder;
 
     @Override
     public JobDto createJob(CreateJob createJob) {
@@ -123,5 +128,16 @@ public class JobServiceImpl implements JobService {
         return jobRepository.findByTitleContainingIgnoreCase(title).stream()
                 .map(jobMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<JobDto> filterJobs(JobFilter filter, Pageable pageable) {
+        Page<Job> jobs = jobCriteriaBuilder.filterJobs(filter, pageable);
+        return jobs.map(jobMapper::toDto);
+    }
+
+    @Override
+    public PageObject<JobDto> filter(JobFilter jobFilter, Pageable pageable) {
+        return null;
     }
 }
