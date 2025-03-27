@@ -62,5 +62,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND.getReason()));
         user.setDeletedAt(Timestamp.valueOf(LocalDateTime.now()));
+        userRepository.save(user);
     }
 }
