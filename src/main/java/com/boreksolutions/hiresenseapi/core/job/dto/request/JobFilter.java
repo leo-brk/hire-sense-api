@@ -7,9 +7,9 @@ public class JobFilter {
 
     private String title;
 
-    private Long industry;
+    private Long industryId;
 
-    private Long city;
+    private Long cityId;
 
-    private Long company;
+    private Long companyId;
 }

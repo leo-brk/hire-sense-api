@@ -30,7 +30,7 @@ public class JobController {
 
       @PostMapping("/filter")
       public ResponseEntity<Page<JobDto>> filterJobs(
-            @RequestBody() JobFilter filter,
+            @RequestBody JobFilter filter,
             Pageable pageable) {
       Page<JobDto> jobs = jobService.filterJobs(filter, pageable);
     return ResponseEntity.ok(jobs);
