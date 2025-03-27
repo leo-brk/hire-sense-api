@@ -39,6 +39,4 @@ public class Company extends BaseEntity {
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CityCompany> cityCompanies = new ArrayList<>();
-
-
 }
