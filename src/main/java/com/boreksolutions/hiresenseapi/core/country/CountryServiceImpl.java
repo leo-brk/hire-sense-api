@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -24,17 +23,20 @@ public class CountryServiceImpl implements CountryService {
         Country country = countryMapper.toEntity(createCountry);
         return countryRepository.save(country).getId();
     }
+
     @Override
     public CountryDto getCountryById(Long id) {
         Country country = countryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Country not found with ID: " + id));
         return countryMapper.toDto(country);
     }
+
     @Override
     public List<CountryDto> getAllCountries() {
         List<Country> countries = countryRepository.findAll();
         return countryMapper.toDtoList(countries);
     }
+
     @Override
     public CountryDto updateCountry(Long id, CreateCountry updateCountry) {
         Country country = countryRepository.findById(id)

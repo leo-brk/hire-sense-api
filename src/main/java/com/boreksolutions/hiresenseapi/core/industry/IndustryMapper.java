@@ -2,8 +2,8 @@ package com.boreksolutions.hiresenseapi.core.industry;
 
 import com.boreksolutions.hiresenseapi.common.PageObject;
 import com.boreksolutions.hiresenseapi.core.industry.dto.response.IndustryDto;
-import com.boreksolutions.hiresenseapi.core.industry.dto.request.CreateIndustry;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

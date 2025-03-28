@@ -6,14 +6,12 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
-import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CityMapper {
 
     @Mapping(target = "countryId", source = "country.id")
     CityDto toDto(City city);
-    List<CityDto> toDtoList(List<City> cities);
 
     @Mapping(target = "country", ignore = true)
     City toEntity(CreateCity createCity);
