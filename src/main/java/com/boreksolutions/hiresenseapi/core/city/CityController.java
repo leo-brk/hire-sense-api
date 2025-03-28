@@ -1,28 +1,26 @@
 package com.boreksolutions.hiresenseapi.core.city;
 
-import com.boreksolutions.hiresenseapi.common.PageObject;
 import com.boreksolutions.hiresenseapi.core.city.dto.request.CreateCity;
 import com.boreksolutions.hiresenseapi.core.city.dto.response.CityDto;
-import com.boreksolutions.hiresenseapi.core.user.dto.response.UserDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
-@RequestMapping("/cities")
+@RequestMapping("/city")
 @RequiredArgsConstructor
 public class CityController {
 
     private final CityService cityService;
 
     @PostMapping
-    public ResponseEntity<CityDto> createCity(@Valid @RequestBody CreateCity createCity) {
-        CityDto cityDto = cityService.createCity(createCity);
-        return new ResponseEntity<>(cityDto, HttpStatus.CREATED);
+    public ResponseEntity<Long> createCity(@Valid @RequestBody CreateCity createCity) {
+        return ResponseEntity.ok(cityService.createCity(createCity));
+
     }
 
     @GetMapping("/{id}")

@@ -166,62 +166,62 @@ public class RestExceptionHandlingControllerAdvice {
         return buildResponseEntity(exception, exceptionResponseObject);
     }
 
-//    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-//    @ExceptionHandler(AuthenticationException.class)
-//    public ResponseEntity<Object> handleAuthenticationException(AuthenticationException ex) {
-//
-//        HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
-//        String message = ex.getLocalizedMessage();
-//
-//        if (ex.getLocalizedMessage().equals("Full authentication is required to access this resource"))
-//            message = "Missing Credentials!";
-//
-//
-//        ExceptionResponseObject errorResponse = new ExceptionResponseObject(httpStatus,
-//                "AUTHENTICATION FAILED: " + message);
-//        return ResponseEntity.status(httpStatus).body(errorResponse);
-//    }
-//
-//    @ResponseStatus(HttpStatus.FORBIDDEN)
-//    @ExceptionHandler(AccessDeniedException.class)
-//    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException exception) {
-//        ExceptionResponseObject exceptionResponseObject =
-//                new ExceptionResponseObject(HttpStatus.FORBIDDEN, exception.getMessage());
-//
-//        return buildResponseEntity(exception, exceptionResponseObject);
-//    }
-//
-//    @ExceptionHandler(ExpiredJwtException.class)
-//    public ResponseEntity<Object> handleInvalidToken(ExpiredJwtException exception) {
-//        ExceptionResponseObject exceptionResponseObject =
-//                new ExceptionResponseObject(HttpStatus.FORBIDDEN, exception.getMessage());
-//
-//        return buildResponseEntity(exception, exceptionResponseObject);
-//    }
-//
-//    @ExceptionHandler(MalformedJwtException.class)
-//    public ResponseEntity<Object> handleInvalidToken(MalformedJwtException exception) {
-//        ExceptionResponseObject exceptionResponseObject =
-//                new ExceptionResponseObject(HttpStatus.FORBIDDEN, exception.getMessage());
-//
-//        return buildResponseEntity(exception, exceptionResponseObject);
-//    }
-//
-//    @ExceptionHandler(HttpMessageNotReadableException.class)
-//    public ResponseEntity<Object> handleDataAccessException(HttpMessageNotReadableException exception) {
-//
-//        ExceptionResponseObject exceptionResponseObject =
-//                new ExceptionResponseObject(HttpStatus.BAD_REQUEST, "Wrong parameters/body received");
-//
-//        return buildResponseEntity(exception, exceptionResponseObject);
-//    }
-//
-//    @ExceptionHandler(FileIoException.class)
-//    public ResponseEntity<Object> handleFileIoException(FileIoException exception) {
-//
-//        ExceptionResponseObject exceptionResponseObject =
-//                new ExceptionResponseObject(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
-//
-//        return buildResponseEntity(exception, exceptionResponseObject);
-//    }
+    //    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    //    @ExceptionHandler(AuthenticationException.class)
+    //    public ResponseEntity<Object> handleAuthenticationException(AuthenticationException ex) {
+    //
+    //        HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
+    //        String message = ex.getLocalizedMessage();
+    //
+    //        if (ex.getLocalizedMessage().equals("Full authentication is required to access this resource"))
+    //            message = "Missing Credentials!";
+    //
+    //
+    //        ExceptionResponseObject errorResponse = new ExceptionResponseObject(httpStatus,
+    //                "AUTHENTICATION FAILED: " + message);
+    //        return ResponseEntity.status(httpStatus).body(errorResponse);
+    //    }
+    //
+    //    @ResponseStatus(HttpStatus.FORBIDDEN)
+    //    @ExceptionHandler(AccessDeniedException.class)
+    //    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException exception) {
+    //        ExceptionResponseObject exceptionResponseObject =
+    //                new ExceptionResponseObject(HttpStatus.FORBIDDEN, exception.getMessage());
+    //
+    //        return buildResponseEntity(exception, exceptionResponseObject);
+    //    }
+    //
+    //    @ExceptionHandler(ExpiredJwtException.class)
+    //    public ResponseEntity<Object> handleInvalidToken(ExpiredJwtException exception) {
+    //        ExceptionResponseObject exceptionResponseObject =
+    //                new ExceptionResponseObject(HttpStatus.FORBIDDEN, exception.getMessage());
+    //
+    //        return buildResponseEntity(exception, exceptionResponseObject);
+    //    }
+    //
+    //    @ExceptionHandler(MalformedJwtException.class)
+    //    public ResponseEntity<Object> handleInvalidToken(MalformedJwtException exception) {
+    //        ExceptionResponseObject exceptionResponseObject =
+    //                new ExceptionResponseObject(HttpStatus.FORBIDDEN, exception.getMessage());
+    //
+    //        return buildResponseEntity(exception, exceptionResponseObject);
+    //    }
+    //
+    //    @ExceptionHandler(HttpMessageNotReadableException.class)
+    //    public ResponseEntity<Object> handleDataAccessException(HttpMessageNotReadableException exception) {
+    //
+    //        ExceptionResponseObject exceptionResponseObject =
+    //                new ExceptionResponseObject(HttpStatus.BAD_REQUEST, "Wrong parameters/body received");
+    //
+    //        return buildResponseEntity(exception, exceptionResponseObject);
+    //    }
+    //
+    //    @ExceptionHandler(FileIoException.class)
+    //    public ResponseEntity<Object> handleFileIoException(FileIoException exception) {
+    //
+    //        ExceptionResponseObject exceptionResponseObject =
+    //                new ExceptionResponseObject(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
+    //
+    //        return buildResponseEntity(exception, exceptionResponseObject);
+    //    }
 }

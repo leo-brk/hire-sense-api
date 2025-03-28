@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CityService {
 
-    CityDto createCity(CreateCity createCity);
+    Long createCity(CreateCity createCity);
 
     CityDto getCityById(Long id);
 

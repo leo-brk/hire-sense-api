@@ -25,9 +25,6 @@ public class CreateJob {
 
     private Boolean archived;
 
-    @NotNull(message = "Updated by user ID cannot be null")
-    private Long updatedById;
-
     @NotNull(message = "Industry ID cannot be null")
     private Long industryId;
 

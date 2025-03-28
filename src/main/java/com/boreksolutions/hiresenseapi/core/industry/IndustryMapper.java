@@ -2,16 +2,14 @@ package com.boreksolutions.hiresenseapi.core.industry;
 
 import com.boreksolutions.hiresenseapi.common.PageObject;
 import com.boreksolutions.hiresenseapi.core.industry.dto.response.IndustryDto;
-import com.boreksolutions.hiresenseapi.core.industry.dto.request.CreateIndustry;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface IndustryMapper {
-
-    @Mapping(target = "id", ignore = true) // Ignore ID during creation
-    @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-    Industry dtoToEntity(CreateIndustry createIndustry);
 
     @Mapping(target = "data", source = "content")
     @Mapping(target = "totalSize", expression = "java(page.getTotalElements())")
@@ -20,8 +18,7 @@ public interface IndustryMapper {
     @Mapping(target = "page", expression = "java(page.getNumber())")
     PageObject<IndustryDto> pageToPageObject(Page<Industry> page);
 
-    @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-    void updateDtoToEntity(IndustryDto source, @MappingTarget Industry target);
+    List<IndustryDto> entityListToDtoList(List<Industry> industryList);
 
     IndustryDto entityToDto(Industry industry);
 }
