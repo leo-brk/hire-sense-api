@@ -5,9 +5,14 @@ import com.boreksolutions.hiresenseapi.core.country.dto.response.CountryDto;
 import java.util.*;
 
 public interface CountryService {
-    CountryDto createCountry(CreateCountry createCountry);
+
+    Long createCountry(CreateCountry createCountry);
+
     CountryDto getCountryById(Long id);
+
     CountryDto updateCountry(Long id, CreateCountry updateCountry);
+
     void deleteCountry(Long id);
+
     List<CountryDto> getAllCountries();
 }
