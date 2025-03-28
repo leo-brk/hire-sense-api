@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface IndustryService {
 
-    IndustryDto createIndustry(CreateIndustry createIndustry);
-
-    List<IndustryDto> getAllIndustries();
+    Long createIndustry(CreateIndustry createIndustry);
 
     IndustryDto getIndustryById(Long id);
+
+    List<IndustryDto> getAllIndustries();
 
     IndustryDto updateIndustry(Long id, CreateIndustry updateIndustry);
 

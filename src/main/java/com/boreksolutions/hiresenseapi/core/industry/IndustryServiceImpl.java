@@ -1,59 +1,56 @@
 package com.boreksolutions.hiresenseapi.core.industry;
 
-import com.boreksolutions.hiresenseapi.core.industry.dto.response.IndustryDto;
+import com.boreksolutions.hiresenseapi.config.exceptions.models.NotFoundException;
 import com.boreksolutions.hiresenseapi.core.industry.dto.request.CreateIndustry;
+import com.boreksolutions.hiresenseapi.core.industry.dto.response.IndustryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class IndustryServiceImpl implements IndustryService {
 
     private final IndustryRepository industryRepository;
+    private final IndustryMapper industryMapper;
 
     @Override
-    public IndustryDto createIndustry(CreateIndustry createIndustry) {
+    public Long createIndustry(CreateIndustry createIndustry) {
         Industry industry = new Industry();
         industry.setName(createIndustry.getName());
-        Industry savedIndustry = industryRepository.save(industry);
-        return mapToDto(savedIndustry);
-    }
-
-    @Override
-    public List<IndustryDto> getAllIndustries() {
-        return industryRepository.findAll().stream()
-                .map(this::mapToDto)
-                .collect(Collectors.toList());
+        return industryRepository.save(industry).getId();
     }
 
     @Override
     public IndustryDto getIndustryById(Long id) {
         Industry industry = industryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Industry not found"));
-        return mapToDto(industry);
+                .orElseThrow(() -> new NotFoundException("Industry with id: " + id + " not found"));
+        return industryMapper.entityToDto(industry);
+    }
+
+    @Override
+    public List<IndustryDto> getAllIndustries() {
+        List<Industry> industries = industryRepository.findAll();
+        return industryMapper.entityListToDtoList(industries);
     }
 
     @Override
     public IndustryDto updateIndustry(Long id, CreateIndustry updateIndustry) {
         Industry industry = industryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Industry not found"));
+                .orElseThrow(() -> new NotFoundException("Industry with id: " + id + " not found"));
         industry.setName(updateIndustry.getName());
         Industry updatedIndustry = industryRepository.save(industry);
-        return mapToDto(updatedIndustry);
+        return industryMapper.entityToDto(updatedIndustry);
     }
 
     @Override
     public void deleteIndustry(Long id) {
-        industryRepository.deleteById(id);
-    }
-
-    private IndustryDto mapToDto(Industry industry) {
-        IndustryDto industryDto = new IndustryDto();
-        industryDto.setId(industry.getId());
-        industryDto.setName(industry.getName());
-        return industryDto;
+        Industry industry = industryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Industry with id: " + id + " not found"));
+        industry.setDeletedAt(Timestamp.valueOf(LocalDateTime.now()));
+        industryRepository.save(industry);
     }
 }
