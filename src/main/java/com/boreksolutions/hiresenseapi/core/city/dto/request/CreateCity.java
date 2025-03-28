@@ -10,6 +10,5 @@ public class CreateCity {
     @NotBlank(message = "City name cannot be blank")
     private String name;
 
-    @NotNull(message = "Country ID cannot be null")
     private Long countryId;
 }
