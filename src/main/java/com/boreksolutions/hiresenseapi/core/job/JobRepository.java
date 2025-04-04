@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
+@Repository("jobEntityRepository")
 public interface JobRepository extends JpaRepository<Job, Long> {
 
     @Query("Select j from Job j where j.id = :id and j.deletedAt is null ")

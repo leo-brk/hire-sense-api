@@ -8,7 +8,6 @@ public class CsvUploadService {
 
     public void receiveFile(MultipartFile file) {
         validateFile(file);
-
     }
 
     private void validateFile(MultipartFile file) {
