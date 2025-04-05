@@ -1,4 +1,4 @@
-package com.boreksolutions.hiresenseapi.config.batch;
+package com.boreksolutions.hiresenseapi.config.batch.entrypoint;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

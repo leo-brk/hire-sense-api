@@ -18,9 +18,9 @@ public class Industry extends BaseEntity {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "industry", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Job> jobs;
-
-    @OneToMany(mappedBy = "industry", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Company> companies;
+//    @OneToMany(mappedBy = "industry", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Job> jobs;
+//
+//    @OneToMany(mappedBy = "industry", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Company> companies;
 }
