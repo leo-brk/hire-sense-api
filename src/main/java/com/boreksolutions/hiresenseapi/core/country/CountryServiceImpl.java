@@ -6,8 +6,6 @@ import com.boreksolutions.hiresenseapi.core.country.dto.response.CountryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -49,7 +47,7 @@ public class CountryServiceImpl implements CountryService {
     public void deleteCountry(Long id) {
         Country country = countryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Country not found with ID: " + id));
-        country.setDeletedAt(Timestamp.valueOf(LocalDateTime.now()));
+        //country.setDeletedAt(Timestamp.valueOf(LocalDateTime.now()));
         countryRepository.save(country);
     }
 }

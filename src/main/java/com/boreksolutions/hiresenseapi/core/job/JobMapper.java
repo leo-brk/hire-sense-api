@@ -15,23 +15,23 @@ public interface JobMapper {
     @Mapping(target = "industryId", source = "industry.id")
     @Mapping(target = "companyId", source = "company.id")
     @Mapping(target = "cityId", source = "city.id")
-    JobDto toDto(Job job);
+    JobDto toDto(JobEntity job);
 
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "industry", ignore = true)
     @Mapping(target = "company", ignore = true)
     @Mapping(target = "city", ignore = true)
-    Job toEntity(CreateJob createJob);
+    JobEntity toEntity(CreateJob createJob);
 
     @Mapping(target = "industry", ignore = true)
     @Mapping(target = "company", ignore = true)
     @Mapping(target = "city", ignore = true)
-    void updateEntity(CreateJob updateJob, @MappingTarget Job job);
+    void updateEntity(CreateJob updateJob, @MappingTarget JobEntity job);
 
     @Mapping(target = "data", source = "content")
     @Mapping(target = "totalSize", expression = "java(page.getTotalElements())")
     @Mapping(target = "totalPages", expression = "java(page.getTotalPages())")
     @Mapping(target = "size", expression = "java(page.getSize())")
     @Mapping(target = "page", expression = "java(page.getNumber())")
-    PageObject<JobDto> pageToPageObject(Page<Job> page);
+    PageObject<JobDto> pageToPageObject(Page<JobEntity> page);
 }

@@ -1,24 +1,38 @@
 spring:
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/hire-sense}
+    url: jdbc:postgresql://localhost:5432/hire-sense?rewriteBatchedInserts=true
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:root}
   jpa:
-    show-sql: true
+    #show-sql: true
     properties:
       hibernate:
         default_schema: public
         enable_lazy_load_no_trans: true
         jdbc:
           time_zone: UTC
+          batch_size: 500
+        order_inserts: true
+        order_updates: true
+        generate_statistics: true
+        batch_versioned_data: true
     open-in-view: false
     generate-ddl: false
     hibernate:
       ddl-auto: update
+  batch:
+    job:
+      enabled: false #Default = true; the jobs will run on application start and this is not desired
+  servlet:
+    multipart:
+      max-file-size: 900MB
+      max-request-size: 900MB
 server:
   port: 8080
   servlet:
     context-path: /api/v1
+
+
 token:
   signing:
     key: 63b8ecdf2e791d9ee16b8987a4379967e8742520d6e4d12063c7a6a06bbc7818a3c70662b81320421489c96c34f1b28a286716c0e6a21604c9c359a6cdf66540

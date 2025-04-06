@@ -13,7 +13,6 @@ public interface CityRepository extends JpaRepository<City, Long> {
 
     boolean existsByName(String name);
 
-
     @Query("Select c from City c where c.deletedAt is null")
     List<City> findAll();
 
