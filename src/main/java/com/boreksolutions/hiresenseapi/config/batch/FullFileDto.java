@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,7 +22,8 @@ public class FullFileDto {
     private String country;
     private String industry;
     private String companySize;
-    private int openJobsCount;
+    private String openJobsCount;
     private String openJobsCountUrl;
+
 }
 

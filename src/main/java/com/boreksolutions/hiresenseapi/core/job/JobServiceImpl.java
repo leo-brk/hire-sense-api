@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class JobServiceImpl implements JobService {
 
-    private final JobRepository jobRepository;
+    private final JobEntityRepository jobEntityRepository;
     private final IndustryRepository industryRepository;
     private final CompanyRepository companyRepository;
     private final CityRepository cityRepository;
@@ -32,7 +32,7 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public Long createJob(CreateJob createJob) {
-        Job job = jobMapper.toEntity(createJob);
+        JobEntity job = jobMapper.toEntity(createJob);
 
         Industry industry = industryRepository.findById(createJob.getIndustryId())
                 .orElseThrow(() -> new NotFoundException("Industry not found with ID: " + createJob.getIndustryId()));
@@ -45,25 +45,25 @@ public class JobServiceImpl implements JobService {
         job.setIndustry(industry);
         job.setCompany(company);
         job.setCity(city);
-        return jobRepository.save(job).getId();
+        return jobEntityRepository.save(job).getId();
     }
 
     @Override
     public JobDto getJobById(Long id) {
-        Job job = jobRepository.findById(id)
+        JobEntity job = jobEntityRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Job not found with ID: " + id));
         return jobMapper.toDto(job);
     }
 
     @Override
     public PageObject<JobDto> filter(JobFilter filter, Pageable pageable) {
-        Page<Job> page = criteriaBuilder.filterJobs(filter, pageable);
+        Page<JobEntity> page = criteriaBuilder.filterJobs(filter, pageable);
         return jobMapper.pageToPageObject(page);
     }
 
     @Override
     public JobDto updateJob(Long id, CreateJob updateJob) {
-        Job job = jobRepository.findById(id)
+        JobEntity job = jobEntityRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Job not found with ID: " + id));
         jobMapper.updateEntity(updateJob, job);
 
@@ -85,16 +85,16 @@ public class JobServiceImpl implements JobService {
             job.setCity(city);
         }
 
-        Job updatedJob = jobRepository.save(job);
+        JobEntity updatedJob = jobEntityRepository.save(job);
         return jobMapper.toDto(updatedJob);
     }
 
     @Override
     public void delete(Long id) {
-        Job job = jobRepository.findById(id)
+        JobEntity job = jobEntityRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Job with id " + id + "not found!"));
         job.setDeletedAt(Timestamp.valueOf(LocalDateTime.now()));
-        jobRepository.save(job);
+        jobEntityRepository.save(job);
     }
 
 }

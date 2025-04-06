@@ -18,4 +18,6 @@ public interface CountryRepository extends JpaRepository<Country, Long> {
 
     @Query("Select c from Country c where c.id = :id and c.deletedAt is null")
     Optional<Country> findById(@Param("id") Long id);
+
+    Country findByName(String countryName);
 }

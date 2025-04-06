@@ -1,6 +1,5 @@
 package com.boreksolutions.hiresenseapi.config.batch.entrypoint;
 
-import com.boreksolutions.hiresenseapi.core.country.CountryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.batch.core.Job;
@@ -19,11 +18,12 @@ import java.io.IOException;
 public class CsvUploadService {
 
     private final JobLauncher jobLauncher;
-    private final Job importJob;
+    private final Job job;
 
     public void receiveFile(MultipartFile file) {
         validateFile(file);
         saveFile(file);
+        launchJob();
     }
 
     private void saveFile(MultipartFile file) {
@@ -31,6 +31,7 @@ public class CsvUploadService {
             String uploadDir = new File("uploads").getAbsolutePath();
             File targetFile = new File(uploadDir, "data.csv");
             file.transferTo(targetFile);
+            log.info("Uploaded file to: " + targetFile.getAbsolutePath());
             System.out.println("Saved to: " + targetFile.getAbsolutePath());
         } catch (IOException e) {
             throw new RuntimeException("Failed to save file", e);
@@ -55,8 +56,7 @@ public class CsvUploadService {
                     .addLong("timestamp", System.currentTimeMillis())
                     .toJobParameters();
 
-            jobLauncher.run(importJob, jobParameters);
-            log.info("CSV import job started successfully.");
+            jobLauncher.run(job, jobParameters);
         } catch (Exception e) {
             log.error("Failed to start CSV import job", e);
             throw new RuntimeException("Job launch failed", e);

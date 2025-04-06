@@ -9,5 +9,4 @@ public class HireSenseApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(HireSenseApiApplication.class, args);
     }
-
 }

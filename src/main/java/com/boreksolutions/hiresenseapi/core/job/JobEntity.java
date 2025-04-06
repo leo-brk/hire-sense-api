@@ -1,6 +1,5 @@
 package com.boreksolutions.hiresenseapi.core.job;
 
-import com.boreksolutions.hiresenseapi.core.base.BaseEntity;
 import com.boreksolutions.hiresenseapi.core.city.City;
 import com.boreksolutions.hiresenseapi.core.company.Company;
 import com.boreksolutions.hiresenseapi.core.industry.Industry;
@@ -8,12 +7,21 @@ import com.boreksolutions.hiresenseapi.core.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.sql.Timestamp;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "job")
-public class Job extends BaseEntity {
+@Table(name = "job_entity")
+public class JobEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "job_entity_seq")
+    @SequenceGenerator(name = "job_entity_seq", sequenceName = "job_entity_seq", allocationSize = 50)
+    private Long id;
 
     @Column(name = "title")
     private String title;
@@ -21,10 +29,10 @@ public class Job extends BaseEntity {
     @Column(name = "crawled_job_title")
     private String crawledJobTitle;
 
-    @Column(name = "url")
+    @Column(name = "url", length = 500)
     private String url;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "number_of_same_positions")
@@ -51,4 +59,15 @@ public class Job extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private Timestamp createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Timestamp updatedAt;
+
+    @Column(name = "deleted_at")
+    private Timestamp deletedAt;
 }
