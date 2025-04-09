@@ -67,10 +67,10 @@ public class JobCriteriaBuilder {
         countQuery.select(criteriaBuilder.count(countRoot)).where(criteriaBuilder.and(predicates.toArray(new Predicate[0])));
 
         // Create a query to count the total number of matching records
-        TypedQuery<JobEntity> sizeQuery = entityManager.createQuery(criteriaQuery);
-        int total = sizeQuery.getResultList().size();
+//        TypedQuery<JobEntity> sizeQuery = entityManager.createQuery(criteriaQuery);
+//        int total = sizeQuery.getResultList().size();
 
 
-        return new PageImpl<>(jobs, pageable, total);
+        return new PageImpl<>(jobs, pageable, 2);
     }
 }

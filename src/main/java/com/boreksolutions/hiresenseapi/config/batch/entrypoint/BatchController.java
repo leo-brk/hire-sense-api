@@ -17,5 +17,11 @@ public class BatchController {
         csvUploadService.receiveFile(file);
         return ResponseEntity.ok("File received successfully - Starting batch process...");
     }
-}
 
+    //For dev. purposes
+    @DeleteMapping("/clear-data")
+    public ResponseEntity<String> clearData() {
+        csvUploadService.clearData();
+        return ResponseEntity.ok("Data cleared successfully");
+    }
+}
