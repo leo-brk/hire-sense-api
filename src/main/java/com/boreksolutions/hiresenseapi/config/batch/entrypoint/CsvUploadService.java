@@ -2,7 +2,6 @@ package com.boreksolutions.hiresenseapi.config.batch.entrypoint;
 
 import com.boreksolutions.hiresenseapi.config.batch.cache.BatchCacheService;
 import com.boreksolutions.hiresenseapi.config.exceptions.models.BadRequestException;
-import com.boreksolutions.hiresenseapi.core.job.JobEntity;
 import com.boreksolutions.hiresenseapi.core.job.JobEntityRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -10,7 +9,6 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,7 +40,7 @@ public class CsvUploadService {
             if (!targetFile.exists()) {
                 if (targetFile.mkdirs())
                     log.info("Directory created: " + uploadDir);
-                 else
+                else
                     throw new RuntimeException("Failed to create directory: " + uploadDir);
             }
 
