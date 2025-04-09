@@ -3,6 +3,13 @@ spring:
     url: jdbc:postgresql://localhost:5432/hire-sense?rewriteBatchedInserts=true
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:root}
+    hikari:
+      maximum-pool-size: 20  # Adjust based on your app's load
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      validation-timeout: 5000
+      leak-detection-threshold: 30000  # Detect any potential connection leaks
   jpa:
     #show-sql: true
     properties:
@@ -19,10 +26,12 @@ spring:
     open-in-view: false
     generate-ddl: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
   batch:
     job:
       enabled: false #Default = true; the jobs will run on application start and this is not desired
+    jdbc:
+      initialize-schema: always
   servlet:
     multipart:
       max-file-size: 900MB
@@ -31,7 +40,6 @@ server:
   port: 8080
   servlet:
     context-path: /api/v1
-
 
 token:
   signing:
