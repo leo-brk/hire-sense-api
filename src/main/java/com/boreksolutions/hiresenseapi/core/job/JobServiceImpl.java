@@ -1,6 +1,7 @@
 package com.boreksolutions.hiresenseapi.core.job;
 
 import com.boreksolutions.hiresenseapi.common.PageObject;
+import com.boreksolutions.hiresenseapi.config.exceptions.models.BadRequestException;
 import com.boreksolutions.hiresenseapi.config.exceptions.models.NotFoundException;
 import com.boreksolutions.hiresenseapi.core.city.City;
 import com.boreksolutions.hiresenseapi.core.city.CityRepository;
@@ -11,13 +12,18 @@ import com.boreksolutions.hiresenseapi.core.industry.IndustryRepository;
 import com.boreksolutions.hiresenseapi.core.job.dto.request.CreateJob;
 import com.boreksolutions.hiresenseapi.core.job.dto.request.JobFilter;
 import com.boreksolutions.hiresenseapi.core.job.dto.response.JobDto;
+import com.boreksolutions.hiresenseapi.core.job.dto.response.StatItem;
+import com.boreksolutions.hiresenseapi.core.job.dto.response.Statistics;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -97,4 +103,32 @@ public class JobServiceImpl implements JobService {
         jobEntityRepository.save(job);
     }
 
+    @Override
+    public List<Statistics> getJobDistributionStatistics() {
+
+        List<Statistics> statistics = new ArrayList<>();
+
+        String [] keywords = {"backend", "frontend", "devops"};
+        Long backend = jobEntityRepository.getJobsWithDescriptionName(keywords[0]);
+        Long frontEnd = jobEntityRepository.getJobsWithDescriptionName(keywords[1]);
+        Long devOps = jobEntityRepository.getJobsWithDescriptionName(keywords[2]);
+
+        Statistics jobDistributionStatistics = new Statistics("jobDistributionStatistics");
+        jobDistributionStatistics.setStatItems(List.of(new StatItem(keywords[0], backend), new StatItem(keywords[1], frontEnd), new StatItem(keywords[2], devOps)));
+        statistics.add(jobDistributionStatistics);
+
+        //Get city distribution
+        Pageable pageable = PageRequest.of(0, 3);  // First page, limit 3 records
+        List<Object[]> results = jobEntityRepository.findTop3CitiesWithMostJobs(pageable);
+
+        if (results.isEmpty() || results.size() < 3) throw new BadRequestException("Error getting city distribution statistics!");
+
+        Statistics cityDistributionStatistics = new Statistics("cityDistributionStatistics");
+        List<StatItem> cityDistributions = results.stream()
+                .map(result -> new StatItem((String) result[0], ((Long) result[1]).doubleValue())).toList();
+        cityDistributionStatistics.setStatItems(cityDistributions);
+        statistics.add(cityDistributionStatistics);
+
+        return statistics;
+    }
 }

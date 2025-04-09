@@ -1,11 +1,13 @@
 package com.boreksolutions.hiresenseapi.core.job;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -17,5 +19,21 @@ public interface JobEntityRepository extends JpaRepository<JobEntity, Long> {
     @Modifying
     @Query(value = "DELETE FROM job_entity; DELETE FROM company; DELETE FROM industry; DELETE FROM city; DELETE FROM country;", nativeQuery = true)
     void clearData();
+
+    @Query("SELECT COUNT(j) FROM JobEntity j WHERE LOWER(j.description) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    Long getJobsWithDescriptionName(@Param("keyword") String keyword);
+
+    @Query("SELECT " +
+            "  COUNT(CASE WHEN LOWER(j.description) LIKE LOWER(CONCAT('%', :keyword1, '%')) THEN 1 END), " +
+            "  COUNT(CASE WHEN LOWER(j.description) LIKE LOWER(CONCAT('%', :keyword2, '%')) THEN 1 END), " +
+            "  COUNT(CASE WHEN LOWER(j.description) LIKE LOWER(CONCAT('%', :keyword3, '%')) THEN 1 END) " +
+            "FROM JobEntity j")
+    Object[] countJobsWithKeywords(
+            @Param("keyword1") String keyword1,
+            @Param("keyword2") String keyword2,
+            @Param("keyword3") String keyword3);
+
+    @Query("SELECT j.city.name, COUNT(j) AS jobCount FROM JobEntity j GROUP BY j.city ORDER BY jobCount DESC")
+    List<Object[]> findTop3CitiesWithMostJobs(Pageable pageable);
 
 }
