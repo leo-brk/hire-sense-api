@@ -41,7 +41,6 @@ server:
   servlet:
     context-path: /api/v1
 
-
 token:
   signing:
     key: 63b8ecdf2e791d9ee16b8987a4379967e8742520d6e4d12063c7a6a06bbc7818a3c70662b81320421489c96c34f1b28a286716c0e6a21604c9c359a6cdf66540
