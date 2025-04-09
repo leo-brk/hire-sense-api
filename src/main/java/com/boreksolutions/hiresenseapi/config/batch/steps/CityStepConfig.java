@@ -13,7 +13,6 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -53,7 +52,6 @@ public class CityStepConfig {
     }
 
     @Bean
-    @Qualifier("cityStep") // Qualifier is not necessary since the name of the bean is taken from the method name, this is simply for readability purposes.
     public Step cityStep(ItemReader<FullFileDto> reader) {
         return new StepBuilder("cityStep", jobRepository)
                 .<FullFileDto, City>chunk(500, transactionManager)

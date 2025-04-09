@@ -48,7 +48,6 @@ public class IndustryStepConfig {
     }
 
     @Bean
-    @Qualifier("industryStep") // Optional, for readability
     public Step industryStep(ItemReader<FullFileDto> reader) {
         return new StepBuilder("industryStep", jobRepository)
                 .<FullFileDto, Industry>chunk(500, transactionManager)

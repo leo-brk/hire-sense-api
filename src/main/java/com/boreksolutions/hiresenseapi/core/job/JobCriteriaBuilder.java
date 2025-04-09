@@ -61,16 +61,11 @@ public class JobCriteriaBuilder {
         query.setMaxResults(pageable.getPageSize());
         List<JobEntity> jobs = query.getResultList();
 
-        // Create a query to count the total number of matching records
-        CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
-        Root<JobEntity> countRoot = countQuery.from(JobEntity.class);
-        countQuery.select(criteriaBuilder.count(countRoot)).where(criteriaBuilder.and(predicates.toArray(new Predicate[0])));
 
         // Create a query to count the total number of matching records
-//        TypedQuery<JobEntity> sizeQuery = entityManager.createQuery(criteriaQuery);
-//        int total = sizeQuery.getResultList().size();
+        TypedQuery<Long> countQuery = entityManager.createQuery("SELECT COUNT(j) FROM JobEntity j", Long.class);
+        Long total = countQuery.getSingleResult();
 
-
-        return new PageImpl<>(jobs, pageable, 2);
+        return new PageImpl<>(jobs, pageable, total);
     }
 }

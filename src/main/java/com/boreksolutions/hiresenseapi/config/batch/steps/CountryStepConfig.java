@@ -46,7 +46,6 @@ public class CountryStepConfig {
     }
 
     @Bean
-    @Qualifier("countryStep") // Optional, for readability
     public Step countryStep(ItemReader<FullFileDto> reader) {
         return new StepBuilder("countryStep", jobRepository)
                 .<FullFileDto, Country>chunk(500, transactionManager)
