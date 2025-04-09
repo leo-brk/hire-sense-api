@@ -60,7 +60,6 @@ public class CompanyStepConfig {
     }
 
     @Bean
-    @Qualifier("companyStep")
     public Step companyStep(ItemReader<FullFileDto> reader) {
         return new StepBuilder("companyStep", jobRepository)
                 .<FullFileDto, Company>chunk(500, transactionManager)

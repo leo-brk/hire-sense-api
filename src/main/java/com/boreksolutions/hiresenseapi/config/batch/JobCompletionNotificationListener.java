@@ -16,7 +16,7 @@ public class JobCompletionNotificationListener implements JobExecutionListener {
     public void afterJob(JobExecution jobExecution) {
         if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
             log.info("Job finished with status: {}", jobExecution.getStatus());
-            //deleteUploadedFile();
+            deleteUploadedFile();
         }
     }
 

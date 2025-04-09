@@ -17,7 +17,4 @@ public interface IndustryRepository extends JpaRepository<Industry, Long> {
 
     @Query("Select i from Industry i where i.deletedAt is null")
     List<Industry> findAll();
-
-    @Query("select new Industry (i.id, i.name) from Industry i")
-    List<Industry> findAllWithPartialData();
 }
