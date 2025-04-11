@@ -36,4 +36,7 @@ public interface JobEntityRepository extends JpaRepository<JobEntity, Long> {
     @Query("SELECT j.city.name, COUNT(j) AS jobCount FROM JobEntity j GROUP BY j.city ORDER BY jobCount DESC")
     List<Object[]> findTop3CitiesWithMostJobs(Pageable pageable);
 
+    @Query("SELECT j.company.name, COUNT(j) AS jobCount FROM JobEntity j GROUP BY j.company ORDER BY jobCount DESC")
+    List<Object[]> findCompaniesWithMostOpenJobs(Pageable pageable);
+
 }
