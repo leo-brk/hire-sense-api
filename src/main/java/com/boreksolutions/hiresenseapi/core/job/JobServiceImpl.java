@@ -141,6 +141,18 @@ public class JobServiceImpl implements JobService {
         companyDistributionStatistics.setStatItems(companyDistributions);
         statistics.add(companyDistributionStatistics);
 
+        //Get position distribution
+        Pageable Positionpageable = PageRequest.of(0, 5);  // First page, limit 5 records
+        List<Object[]> Positionresults = jobEntityRepository.findTopPositions(Positionpageable);
+
+        if (Positionresults.isEmpty() || Positionresults.size() < 5) throw new BadRequestException("Error getting Position distribution statistics!");
+
+        Statistics positionDistributionStatistics = new Statistics("positionDistributionStatistics");
+        List<StatItem> positionDistributions = Positionresults.stream()
+                .map(result -> new StatItem((String) result[0], ((Long) result[1]).doubleValue())).toList();
+        positionDistributionStatistics.setStatItems(positionDistributions);
+        statistics.add(positionDistributionStatistics);
+
         return statistics;
     }
 }
