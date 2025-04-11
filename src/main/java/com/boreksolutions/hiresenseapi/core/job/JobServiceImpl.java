@@ -129,6 +129,18 @@ public class JobServiceImpl implements JobService {
         cityDistributionStatistics.setStatItems(cityDistributions);
         statistics.add(cityDistributionStatistics);
 
+        //Get company distribution
+        Pageable Companypageable = PageRequest.of(0, 5);  // First page, limit 5 records
+        List<Object[]> Copanyresults = jobEntityRepository.findCompaniesWithMostOpenJobs(Companypageable);
+
+        if (Copanyresults.isEmpty() || Copanyresults.size() < 5) throw new BadRequestException("Error getting company distribution statistics!");
+
+        Statistics companyDistributionStatistics = new Statistics("companyDistributionStatistics");
+        List<StatItem> companyDistributions = Copanyresults.stream()
+                .map(result -> new StatItem((String) result[0], ((Long) result[1]).doubleValue())).toList();
+        companyDistributionStatistics.setStatItems(companyDistributions);
+        statistics.add(companyDistributionStatistics);
+
         return statistics;
     }
 }
