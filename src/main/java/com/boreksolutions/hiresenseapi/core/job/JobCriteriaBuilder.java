@@ -29,30 +29,60 @@ public class JobCriteriaBuilder {
 
         List<Predicate> predicates = new ArrayList<>();
 
-        // Filter by Title
-        if (filter.getTitle() != null && !filter.getTitle().isEmpty())
+        // Filter by title
+        if (filter.getTitle() != null && !filter.getTitle().isEmpty()) {
             predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("title")),
-                    "%%" + filter.getTitle().toLowerCase() + "%%"));
+                    "%" + filter.getTitle().toLowerCase() + "%"));
+        }
+
+        // Filter by job type
+//        if (filter.getJobType() != null) {
+//            predicates.add(criteriaBuilder.equal(root.get("jobType"), filter.getJobType()));
+//        }
+
+        // Filter by posted date
+//        if (filter.getPostedDate() != null && !filter.getPostedDate().isEmpty()) {
+//            predicates.add(criteriaBuilder.equal(root.get("postedDate"), filter.getPostedDate()));
+//        }
 
         // Filter by company ID
-        Long companyId = filter.getCompanyId();
-        if (companyId != null)
-            predicates.add(criteriaBuilder.equal(root.get("company").get("id"), companyId));
+        if (filter.getCompanyId() != null) {
+            predicates.add(criteriaBuilder.equal(root.get("company").get("id"), filter.getCompanyId()));
+        }
 
-        // Filter by city ID
-        Long cityId = filter.getCityId();
-        if (cityId != null)
-            predicates.add(criteriaBuilder.equal(root.get("city").get("id"), cityId));
+        // Filter by company size
+        if (filter.getCompanySize() != null) {
+            predicates.add(criteriaBuilder.equal(root.get("company").get("companySize"), filter.getCompanySize()));
+        }
+
+        // Filter by open jobs count
+        if (filter.getOpenJobsNumber() != null) {
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("company").get("openJobsNumber"), filter.getOpenJobsNumber()));
+        }
+
+        // Filter by position name
+        if (filter.getPositionName() != null && !filter.getPositionName().isEmpty()) {
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("positionName")),
+                    "%" + filter.getPositionName().toLowerCase() + "%"));
+        }
 
         // Filter by industry ID
-        Long industryId = filter.getIndustryId();
-        if (industryId != null)
-            predicates.add(criteriaBuilder.equal(root.get("industry").get("id"), industryId));
+        if (filter.getIndustryId() != null) {
+            predicates.add(criteriaBuilder.equal(root.get("industry").get("id"), filter.getIndustryId()));
+        }
 
+        // Filter by city ID
+        if (filter.getCityId() != null) {
+            predicates.add(criteriaBuilder.equal(root.get("city").get("id"), filter.getCityId()));
+        }
 
-        predicates.add(criteriaBuilder.isNull(root.get("deletedAt")));
+        // Filter by country ID
+        if (filter.getCountryId() != null) {
+            predicates.add(criteriaBuilder.equal(root.get("country").get("id"), filter.getCountryId()));
+        }
 
         // Apply predicates to the query
+        predicates.add(criteriaBuilder.isNull(root.get("deletedAt"))); // Filter for non-deleted records
         criteriaQuery.where(criteriaBuilder.and(predicates.toArray(new Predicate[0])));
 
         // Execute the query for the paginated results
@@ -60,7 +90,6 @@ public class JobCriteriaBuilder {
         query.setFirstResult((int) pageable.getOffset());
         query.setMaxResults(pageable.getPageSize());
         List<JobEntity> jobs = query.getResultList();
-
 
         // Create a query to count the total number of matching records
         TypedQuery<Long> countQuery = entityManager.createQuery("SELECT COUNT(j) FROM JobEntity j", Long.class);
