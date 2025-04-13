@@ -23,15 +23,6 @@ public interface JobEntityRepository extends JpaRepository<JobEntity, Long> {
     @Query("SELECT COUNT(j) FROM JobEntity j WHERE LOWER(j.description) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Long getJobsWithDescriptionName(@Param("keyword") String keyword);
 
-    @Query("SELECT " +
-            "  COUNT(CASE WHEN LOWER(j.description) LIKE LOWER(CONCAT('%', :keyword1, '%')) THEN 1 END), " +
-            "  COUNT(CASE WHEN LOWER(j.description) LIKE LOWER(CONCAT('%', :keyword2, '%')) THEN 1 END), " +
-            "  COUNT(CASE WHEN LOWER(j.description) LIKE LOWER(CONCAT('%', :keyword3, '%')) THEN 1 END) " +
-            "FROM JobEntity j")
-    Object[] countJobsWithKeywords(
-            @Param("keyword1") String keyword1,
-            @Param("keyword2") String keyword2,
-            @Param("keyword3") String keyword3);
 
     @Query("SELECT j.city.name, COUNT(j) AS jobCount FROM JobEntity j GROUP BY j.city ORDER BY jobCount DESC")
     List<Object[]> findTop3CitiesWithMostJobs(Pageable pageable);

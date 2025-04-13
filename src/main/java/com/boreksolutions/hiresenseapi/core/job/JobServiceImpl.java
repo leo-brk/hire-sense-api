@@ -17,6 +17,7 @@ import com.boreksolutions.hiresenseapi.core.job.dto.response.Statistics;
 import com.boreksolutions.hiresenseapi.core.job.dto.response.ViewJob;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.batch.core.Job;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +38,7 @@ public class JobServiceImpl implements JobService {
     private final CityRepository cityRepository;
     private final JobMapper jobMapper;
     private final JobCriteriaBuilder criteriaBuilder;
+    private final Job job;
     private List<Statistics> statistics;
 
     @Override
@@ -116,6 +118,8 @@ public class JobServiceImpl implements JobService {
     @PostConstruct
     public List<Statistics> getStatistics() {
         List<Statistics> statistics = new ArrayList<>();
+
+        if(jobEntityRepository.count() <= 0) return statistics;
 
         String [] keywords = {"Backend", "Frontend", "Devops"};
         Long backend = jobEntityRepository.getJobsWithDescriptionName(keywords[0]);
