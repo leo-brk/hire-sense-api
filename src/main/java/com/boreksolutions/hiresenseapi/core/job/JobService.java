@@ -5,6 +5,7 @@ import com.boreksolutions.hiresenseapi.core.job.dto.request.CreateJob;
 import com.boreksolutions.hiresenseapi.core.job.dto.request.JobFilter;
 import com.boreksolutions.hiresenseapi.core.job.dto.response.JobDto;
 import com.boreksolutions.hiresenseapi.core.job.dto.response.Statistics;
+import com.boreksolutions.hiresenseapi.core.job.dto.response.ViewJob;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 
@@ -20,7 +21,7 @@ public interface JobService {
 
     void delete(Long id);
 
-    PageObject<JobDto> filter(JobFilter jobFilter, Pageable pageable);
+    PageObject<ViewJob> filter(JobFilter jobFilter, Pageable pageable);
 
-    List<Statistics> getJobDistributionStatistics();
+    List<Statistics> getJobDistributionStatistics(Boolean getLive);
 }

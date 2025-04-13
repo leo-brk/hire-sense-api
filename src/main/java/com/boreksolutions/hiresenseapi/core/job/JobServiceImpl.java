@@ -14,6 +14,8 @@ import com.boreksolutions.hiresenseapi.core.job.dto.request.JobFilter;
 import com.boreksolutions.hiresenseapi.core.job.dto.response.JobDto;
 import com.boreksolutions.hiresenseapi.core.job.dto.response.StatItem;
 import com.boreksolutions.hiresenseapi.core.job.dto.response.Statistics;
+import com.boreksolutions.hiresenseapi.core.job.dto.response.ViewJob;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +37,7 @@ public class JobServiceImpl implements JobService {
     private final CityRepository cityRepository;
     private final JobMapper jobMapper;
     private final JobCriteriaBuilder criteriaBuilder;
+    private List<Statistics> statistics;
 
     @Override
     public Long createJob(CreateJob createJob) {
@@ -62,7 +65,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public PageObject<JobDto> filter(JobFilter filter, Pageable pageable) {
+    public PageObject<ViewJob> filter(JobFilter filter, Pageable pageable) {
         Page<JobEntity> page = criteriaBuilder.filterJobs(filter, pageable);
         return jobMapper.pageToPageObject(page);
     }
@@ -104,24 +107,33 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<Statistics> getJobDistributionStatistics() {
+    public List<Statistics> getJobDistributionStatistics(Boolean getLive) {
+        if (getLive != null && getLive) return getStatistics();
 
+        return statistics;
+    }
+
+    @PostConstruct
+    public List<Statistics> getStatistics() {
         List<Statistics> statistics = new ArrayList<>();
 
-        String [] keywords = {"backend", "frontend", "devops"};
+        String [] keywords = {"Backend", "Frontend", "Devops"};
         Long backend = jobEntityRepository.getJobsWithDescriptionName(keywords[0]);
         Long frontEnd = jobEntityRepository.getJobsWithDescriptionName(keywords[1]);
         Long devOps = jobEntityRepository.getJobsWithDescriptionName(keywords[2]);
 
         Statistics jobDistributionStatistics = new Statistics("jobDistributionStatistics");
-        jobDistributionStatistics.setStatItems(List.of(new StatItem(keywords[0], backend), new StatItem(keywords[1], frontEnd), new StatItem(keywords[2], devOps)));
+        jobDistributionStatistics.setStatItems(List.of(new StatItem(keywords[0], backend),
+                new StatItem(keywords[1], frontEnd),
+                new StatItem(keywords[2], devOps)));
         statistics.add(jobDistributionStatistics);
 
         //Get city distribution
         Pageable pageable = PageRequest.of(0, 3);  // First page, limit 3 records
         List<Object[]> results = jobEntityRepository.findTop3CitiesWithMostJobs(pageable);
 
-        if (results.isEmpty() || results.size() < 3) throw new BadRequestException("Error getting city distribution statistics!");
+        if (results.isEmpty() || results.size() < 3) 
+            throw new BadRequestException("Error getting city distribution statistics!");
 
         Statistics cityDistributionStatistics = new Statistics("cityDistributionStatistics");
         List<StatItem> cityDistributions = results.stream()
@@ -130,29 +142,33 @@ public class JobServiceImpl implements JobService {
         statistics.add(cityDistributionStatistics);
 
         //Get company distribution
-        Pageable Companypageable = PageRequest.of(0, 5);  // First page, limit 5 records
-        List<Object[]> Copanyresults = jobEntityRepository.findCompaniesWithMostOpenJobs(Companypageable);
+        Pageable companyPageable = PageRequest.of(0, 5);  // First page, limit 5 records
+        List<Object[]> companyResults = jobEntityRepository.findCompaniesWithMostOpenJobs(companyPageable);
 
-        if (Copanyresults.isEmpty() || Copanyresults.size() < 5) throw new BadRequestException("Error getting company distribution statistics!");
+        if (companyResults.isEmpty() || companyResults.size() < 5) 
+            throw new BadRequestException("Error getting company distribution statistics!");
 
         Statistics companyDistributionStatistics = new Statistics("companyDistributionStatistics");
-        List<StatItem> companyDistributions = Copanyresults.stream()
+        List<StatItem> companyDistributions = companyResults.stream()
                 .map(result -> new StatItem((String) result[0], ((Long) result[1]).doubleValue())).toList();
         companyDistributionStatistics.setStatItems(companyDistributions);
         statistics.add(companyDistributionStatistics);
 
         //Get position distribution
-        Pageable Positionpageable = PageRequest.of(0, 5);  // First page, limit 5 records
-        List<Object[]> Positionresults = jobEntityRepository.findTopPositions(Positionpageable);
+        Pageable positionPageable = PageRequest.of(0, 5);
+        List<Object[]> positionResults = jobEntityRepository.findTopPositions(positionPageable);
 
-        if (Positionresults.isEmpty() || Positionresults.size() < 5) throw new BadRequestException("Error getting Position distribution statistics!");
+        if (positionResults.isEmpty() || positionResults.size() < 5) 
+            throw new BadRequestException("Error getting Position distribution statistics!");
 
         Statistics positionDistributionStatistics = new Statistics("positionDistributionStatistics");
-        List<StatItem> positionDistributions = Positionresults.stream()
+        List<StatItem> positionDistributions = positionResults.stream()
                 .map(result -> new StatItem((String) result[0], ((Long) result[1]).doubleValue())).toList();
         positionDistributionStatistics.setStatItems(positionDistributions);
         statistics.add(positionDistributionStatistics);
 
+        this.statistics = statistics;
         return statistics;
     }
+
 }
