@@ -5,9 +5,9 @@ import com.boreksolutions.hiresenseapi.core.job.dto.request.CreateJob;
 import com.boreksolutions.hiresenseapi.core.job.dto.request.JobFilter;
 import com.boreksolutions.hiresenseapi.core.job.dto.response.JobDto;
 import com.boreksolutions.hiresenseapi.core.job.dto.response.Statistics;
+import com.boreksolutions.hiresenseapi.core.job.dto.response.ViewJob;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.batch.core.Job;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,6 @@ import java.util.List;
 public class JobController {
 
     private final JobService jobService;
-    private final Job job;
 
     @PostMapping
     public ResponseEntity<Long> create(@Valid @RequestBody CreateJob createJob) {
@@ -33,13 +32,14 @@ public class JobController {
     }
 
     @PostMapping("/filter")
-    public ResponseEntity<PageObject<JobDto>> filter(@RequestBody JobFilter filter, Pageable pageable) {
+    public ResponseEntity<PageObject<ViewJob>> filter(@RequestBody JobFilter filter, Pageable pageable) {
         return ResponseEntity.ok(jobService.filter(filter, pageable));
     }
 
     @GetMapping("/statistics")
-    public ResponseEntity<List<Statistics>> getJobDistributionStatistics() {
-        return ResponseEntity.ok(jobService.getJobDistributionStatistics());
+    public ResponseEntity<List<Statistics>> getJobDistributionStatistics(
+            @RequestParam(required = false, name = "getLive") Boolean getLive) {
+        return ResponseEntity.ok(jobService.getJobDistributionStatistics(getLive));
     }
 
 
