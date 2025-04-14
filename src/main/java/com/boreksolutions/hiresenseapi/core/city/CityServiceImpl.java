@@ -5,6 +5,8 @@ import com.boreksolutions.hiresenseapi.core.city.dto.request.CreateCity;
 import com.boreksolutions.hiresenseapi.core.city.dto.response.CityDto;
 import com.boreksolutions.hiresenseapi.core.country.Country;
 import com.boreksolutions.hiresenseapi.core.country.CountryRepository;
+import com.boreksolutions.hiresenseapi.core.industry.Industry;
+import com.boreksolutions.hiresenseapi.core.industry.dto.response.IndustryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +45,13 @@ public class CityServiceImpl implements CityService {
         return cityRepository.findAll().stream()
                 .map(cityMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CityDto> findCityStartingWith(String name) {
+        String searchTerm = name.trim().toLowerCase();
+        List<City> cities = cityRepository.findByNameStartingWithIgnoreCase(searchTerm);
+        return cityMapper.entityListToDtoList(cities);
     }
 
     @Override
