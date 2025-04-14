@@ -26,10 +26,6 @@ public class IndustryController {
         return ResponseEntity.ok(industryService.getIndustryById(id));
     }
 
-//    @GetMapping("/name/{name}")
-//    public ResponseEntity<List<Industry>> searchByName(@PathVariable String name) {
-//        return ResponseEntity.ok(industryService.findByNameContainingIgnoreCase(name));
-//    }
     @GetMapping("/search")
     public List<IndustryDto> searchIndustries(
         @RequestParam String startsWith

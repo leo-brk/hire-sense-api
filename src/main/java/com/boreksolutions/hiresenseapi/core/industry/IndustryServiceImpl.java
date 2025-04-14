@@ -37,11 +37,6 @@ public class IndustryServiceImpl implements IndustryService {
         return industryMapper.entityListToDtoList(industries);
     }
 
-//    @Override
-//    public List<IndustryDto> searchIndustriesByName(String name) {
-//        List<Industry> industries = industryRepository.findByName(name);
-//        return industryMapper.entityListToDtoList(industries);
-//    }
     @Override
     public List<IndustryDto> findIndustriesStartingWith(String name) {
         String searchTerm = name.trim().toLowerCase();
