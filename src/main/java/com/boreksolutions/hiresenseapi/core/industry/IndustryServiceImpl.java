@@ -38,6 +38,18 @@ public class IndustryServiceImpl implements IndustryService {
     }
 
     @Override
+    public List<IndustryDto> findIndustriesStartingWith(String name) {
+        String searchTerm = name.trim().toLowerCase();
+        List<Industry> industries = industryRepository.findByNameStartingWithIgnoreCase(searchTerm);
+        return industryMapper.entityListToDtoList(industries);
+    }
+
+    @Override
+    public List<IndustryDto> searchIndustriesByName(String name) {
+        return List.of();
+    }
+
+    @Override
     public IndustryDto updateIndustry(Long id, CreateIndustry updateIndustry) {
         Industry industry = industryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Industry with id: " + id + " not found"));

@@ -13,6 +13,10 @@ public interface IndustryService {
 
     List<IndustryDto> getAllIndustries();
 
+    List<IndustryDto> findIndustriesStartingWith(String name);
+
+    List<IndustryDto> searchIndustriesByName(String name);
+
     IndustryDto updateIndustry(Long id, CreateIndustry updateIndustry);
 
     void deleteIndustry(Long id);

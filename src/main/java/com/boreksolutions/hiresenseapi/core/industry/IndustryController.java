@@ -26,6 +26,13 @@ public class IndustryController {
         return ResponseEntity.ok(industryService.getIndustryById(id));
     }
 
+    @GetMapping("/search")
+    public List<IndustryDto> searchIndustries(
+        @RequestParam String startsWith
+    ) {
+        return industryService.findIndustriesStartingWith(startsWith);
+    }
+
     @GetMapping
     public ResponseEntity<List<IndustryDto>> findAll() {
         return ResponseEntity.ok(industryService.getAllIndustries());

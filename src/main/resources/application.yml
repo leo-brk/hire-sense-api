@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/hire-sense?rewriteBatchedInserts=true
     username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:root}
+    password: ${DB_PASSWORD:DarkCover66}
     hikari:
       maximum-pool-size: 20  # Adjust based on your app's load
       connection-timeout: 30000

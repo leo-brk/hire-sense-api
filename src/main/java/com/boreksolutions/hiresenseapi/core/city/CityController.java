@@ -2,6 +2,7 @@ package com.boreksolutions.hiresenseapi.core.city;
 
 import com.boreksolutions.hiresenseapi.core.city.dto.request.CreateCity;
 import com.boreksolutions.hiresenseapi.core.city.dto.response.CityDto;
+import com.boreksolutions.hiresenseapi.core.industry.dto.response.IndustryDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,13 @@ public class CityController {
     public ResponseEntity<List<CityDto>> getAllCities() {
         List<CityDto> cities = cityService.getAllCities();
         return new ResponseEntity<>(cities, HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public List<CityDto> searchCities(
+            @RequestParam String startsWith
+    ) {
+        return cityService.findCityStartingWith(startsWith);
     }
 
     @PutMapping("/{id}")

@@ -17,4 +17,9 @@ public interface IndustryRepository extends JpaRepository<Industry, Long> {
 
     @Query("Select i from Industry i where i.deletedAt is null")
     List<Industry> findAll();
+
+    List<Industry> findByNameStartingWithIgnoreCase(String name);
+
+    @Query("SELECT i FROM Industry i WHERE LOWER(i.name) LIKE LOWER(CONCAT(:name, '%'))")
+    List<Industry> findByNameStartsWithCustom(@Param("name") String name);
 }
