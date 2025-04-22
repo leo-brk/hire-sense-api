@@ -33,4 +33,6 @@ public interface JobEntityRepository extends JpaRepository<JobEntity, Long> {
     @Query("SELECT j.title, COUNT(j) AS positionCount FROM JobEntity j GROUP BY j.title ORDER BY positionCount DESC")
     List<Object[]> findTopPositions(Pageable pageable);
 
+    long count();
+
 }

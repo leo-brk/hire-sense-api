@@ -22,6 +22,17 @@ public class JobCriteriaBuilder {
 
     private final EntityManager entityManager;
 
+    public long count() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
+        Root<JobEntity> root = countQuery.from(JobEntity.class);
+
+        countQuery.select(criteriaBuilder.count(root));
+        countQuery.where(criteriaBuilder.isNull(root.get("deletedAt")));
+
+        return entityManager.createQuery(countQuery).getSingleResult();
+    }
+
     public Page<JobEntity> filterJobs(JobFilter filter, Pageable pageable) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<JobEntity> criteriaQuery = criteriaBuilder.createQuery(JobEntity.class);
