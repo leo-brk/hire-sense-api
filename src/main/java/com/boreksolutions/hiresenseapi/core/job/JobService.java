@@ -25,5 +25,5 @@ public interface JobService {
 
     List<Statistics> getJobDistributionStatistics(Boolean getLive);
 
-    long getTotalJobCount();
+    Long count();
 }

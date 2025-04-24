@@ -59,7 +59,7 @@ public class JobServiceImpl implements JobService {
         return jobEntityRepository.save(job).getId();
     }
 
-    public long getTotalJobCount() {
+    public Long count() {
         return jobEntityRepository.count();
     }
 

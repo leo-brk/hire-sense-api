@@ -43,10 +43,9 @@ public class JobController {
     }
 
     @GetMapping("/count")
-    public ResponseEntity<Long> getTotalJobCount() {
-        return ResponseEntity.ok(jobService.getTotalJobCount());
+    public ResponseEntity<Long> count() {
+        return ResponseEntity.ok(jobService.count());
     }
-
 
     @PutMapping("/{id}")
     public ResponseEntity<JobDto> update(
