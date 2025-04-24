@@ -16,4 +16,6 @@ public class Statistics {
     public Statistics(String name) {
         this.name = name;
     }
+
+    public record JobPositionCount(String title, Long count) {}
 }

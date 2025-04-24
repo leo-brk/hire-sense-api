@@ -24,4 +24,6 @@ public interface JobService {
     PageObject<ViewJob> filter(JobFilter jobFilter, Pageable pageable);
 
     List<Statistics> getJobDistributionStatistics(Boolean getLive);
+
+    long getTotalJobCount();
 }

@@ -59,6 +59,10 @@ public class JobServiceImpl implements JobService {
         return jobEntityRepository.save(job).getId();
     }
 
+    public long getTotalJobCount() {
+        return jobEntityRepository.count();
+    }
+
     @Override
     public JobDto getJobById(Long id) {
         JobEntity job = jobEntityRepository.findById(id)
@@ -121,22 +125,36 @@ public class JobServiceImpl implements JobService {
 
         if(jobEntityRepository.count() <= 0) return statistics;
 
-        String [] keywords = {"Backend", "Frontend", "Devops"};
+        String [] keywords = {"Backend", "Frontend", "Devops", "IT", "Cloud", "CyberSecurity", "Manager", "UIUX", "Java", "RPA"};
         Long backend = jobEntityRepository.getJobsWithDescriptionName(keywords[0]);
         Long frontEnd = jobEntityRepository.getJobsWithDescriptionName(keywords[1]);
         Long devOps = jobEntityRepository.getJobsWithDescriptionName(keywords[2]);
+        Long IT = jobEntityRepository.getJobsWithDescriptionName(keywords[3]);
+        Long Cloud = jobEntityRepository.getJobsWithDescriptionName(keywords[4]);
+        Long CyberSecurity = jobEntityRepository.getJobsWithDescriptionName(keywords[5]);
+        Long Manager = jobEntityRepository.getJobsWithDescriptionName(keywords[6]);
+        Long UIUX = jobEntityRepository.getJobsWithDescriptionName(keywords[7]);
+        Long Java = jobEntityRepository.getJobsWithDescriptionName(keywords[8]);
+        Long RPA = jobEntityRepository.getJobsWithDescriptionName(keywords[9]);
 
         Statistics jobDistributionStatistics = new Statistics("jobDistributionStatistics");
         jobDistributionStatistics.setStatItems(List.of(new StatItem(keywords[0], backend),
                 new StatItem(keywords[1], frontEnd),
-                new StatItem(keywords[2], devOps)));
+                new StatItem(keywords[2], devOps),
+                new StatItem(keywords[3], IT),
+                new StatItem(keywords[4], Cloud),
+                new StatItem(keywords[5], CyberSecurity),
+                new StatItem(keywords[6], Manager),
+                new StatItem(keywords[7], UIUX),
+                new StatItem(keywords[8], Java),
+                new StatItem(keywords[9], RPA)));
         statistics.add(jobDistributionStatistics);
 
         //Get city distribution
-        Pageable pageable = PageRequest.of(0, 3);  // First page, limit 3 records
+        Pageable pageable = PageRequest.of(0, 10);  // First page, limit 3 records
         List<Object[]> results = jobEntityRepository.findTop3CitiesWithMostJobs(pageable);
 
-        if (results.isEmpty() || results.size() < 3) 
+        if (results.isEmpty() || results.size() < 10)
             throw new BadRequestException("Error getting city distribution statistics!");
 
         Statistics cityDistributionStatistics = new Statistics("cityDistributionStatistics");
@@ -146,10 +164,10 @@ public class JobServiceImpl implements JobService {
         statistics.add(cityDistributionStatistics);
 
         //Get company distribution
-        Pageable companyPageable = PageRequest.of(0, 5);  // First page, limit 5 records
+        Pageable companyPageable = PageRequest.of(0, 10);  // First page, limit 5 records
         List<Object[]> companyResults = jobEntityRepository.findCompaniesWithMostOpenJobs(companyPageable);
 
-        if (companyResults.isEmpty() || companyResults.size() < 5) 
+        if (companyResults.isEmpty() || companyResults.size() < 10)
             throw new BadRequestException("Error getting company distribution statistics!");
 
         Statistics companyDistributionStatistics = new Statistics("companyDistributionStatistics");
@@ -159,10 +177,10 @@ public class JobServiceImpl implements JobService {
         statistics.add(companyDistributionStatistics);
 
         //Get position distribution
-        Pageable positionPageable = PageRequest.of(0, 5);
+        Pageable positionPageable = PageRequest.of(0, 10);
         List<Object[]> positionResults = jobEntityRepository.findTopPositions(positionPageable);
 
-        if (positionResults.isEmpty() || positionResults.size() < 5) 
+        if (positionResults.isEmpty() || positionResults.size() < 10)
             throw new BadRequestException("Error getting Position distribution statistics!");
 
         Statistics positionDistributionStatistics = new Statistics("positionDistributionStatistics");
@@ -174,5 +192,4 @@ public class JobServiceImpl implements JobService {
         this.statistics = statistics;
         return statistics;
     }
-
 }
