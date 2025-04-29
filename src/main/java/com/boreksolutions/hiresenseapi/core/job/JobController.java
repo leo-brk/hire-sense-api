@@ -1,6 +1,7 @@
 package com.boreksolutions.hiresenseapi.core.job;
 
 import com.boreksolutions.hiresenseapi.common.PageObject;
+import com.boreksolutions.hiresenseapi.core.company.Company;
 import com.boreksolutions.hiresenseapi.core.job.dto.request.CreateJob;
 import com.boreksolutions.hiresenseapi.core.job.dto.request.JobFilter;
 import com.boreksolutions.hiresenseapi.core.job.dto.response.JobDto;
@@ -9,9 +10,12 @@ import com.boreksolutions.hiresenseapi.core.job.dto.response.ViewJob;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -38,14 +42,25 @@ public class JobController {
 
     @GetMapping("/statistics")
     public ResponseEntity<List<Statistics>> getJobDistributionStatistics(
-            @RequestParam(required = false, name = "getLive") Boolean getLive) {
-        return ResponseEntity.ok(jobService.getJobDistributionStatistics(getLive));
+        @RequestParam(required = false, name = "getLive") Boolean getLive,
+        @RequestParam(required = false, name = "fromDate")
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fromDate,
+        @RequestParam(required = false, name = "toDate")
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime toDate) {
+
+    if (fromDate == null && toDate == null && getLive != null && getLive) {
+        fromDate = LocalDate.of(2022, 1, 1).atStartOfDay();
+        toDate = LocalDateTime.now();
     }
+
+    return ResponseEntity.ok(jobService.getJobDistributionStatistics(getLive, fromDate, toDate));
+}
 
     @GetMapping("/count")
     public ResponseEntity<Long> count() {
         return ResponseEntity.ok(jobService.count());
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<JobDto> update(

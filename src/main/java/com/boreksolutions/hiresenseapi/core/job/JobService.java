@@ -1,6 +1,7 @@
 package com.boreksolutions.hiresenseapi.core.job;
 
 import com.boreksolutions.hiresenseapi.common.PageObject;
+import com.boreksolutions.hiresenseapi.core.company.Company;
 import com.boreksolutions.hiresenseapi.core.job.dto.request.CreateJob;
 import com.boreksolutions.hiresenseapi.core.job.dto.request.JobFilter;
 import com.boreksolutions.hiresenseapi.core.job.dto.response.JobDto;
@@ -9,6 +10,7 @@ import com.boreksolutions.hiresenseapi.core.job.dto.response.ViewJob;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface JobService {
@@ -25,5 +27,11 @@ public interface JobService {
 
     List<Statistics> getJobDistributionStatistics(Boolean getLive);
 
+    List<Statistics> getJobDistributionStatistics(Boolean getLive, JobFilter filter);
+
     Long count();
+
+    List<Statistics> getStatistics(String filter);
+
+    List<Statistics> getJobDistributionStatistics(Boolean getLive, LocalDateTime from, LocalDateTime to);
 }

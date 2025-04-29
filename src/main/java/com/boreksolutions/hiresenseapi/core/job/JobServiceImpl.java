@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -61,6 +62,11 @@ public class JobServiceImpl implements JobService {
 
     public Long count() {
         return jobEntityRepository.count();
+    }
+
+    @Override
+    public List<Statistics> getStatistics(String filter) {
+        return List.of();
     }
 
     @Override
@@ -114,82 +120,86 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public List<Statistics> getJobDistributionStatistics(Boolean getLive) {
-        if (getLive != null && getLive) return getStatistics();
-
+        if (getLive != null && getLive) return loadStatistics(null, null);
         return statistics;
     }
+
+    @Override
+    public List<Statistics> getJobDistributionStatistics(Boolean getLive, JobFilter filter) {
+        return List.of();
+    }
+
 
     @PostConstruct
-    public List<Statistics> getStatistics() {
-        List<Statistics> statistics = new ArrayList<>();
+    public void initStatistics() {
+        this.statistics = Collections.unmodifiableList(loadStatistics(null, null));
+    }
 
-        if(jobEntityRepository.count() <= 0) return statistics;
-
-        String [] keywords = {"Backend", "Frontend", "Devops", "IT", "Cloud", "CyberSecurity", "Manager", "UIUX", "Java", "RPA"};
-        Long backend = jobEntityRepository.getJobsWithDescriptionName(keywords[0]);
-        Long frontEnd = jobEntityRepository.getJobsWithDescriptionName(keywords[1]);
-        Long devOps = jobEntityRepository.getJobsWithDescriptionName(keywords[2]);
-        Long IT = jobEntityRepository.getJobsWithDescriptionName(keywords[3]);
-        Long Cloud = jobEntityRepository.getJobsWithDescriptionName(keywords[4]);
-        Long CyberSecurity = jobEntityRepository.getJobsWithDescriptionName(keywords[5]);
-        Long Manager = jobEntityRepository.getJobsWithDescriptionName(keywords[6]);
-        Long UIUX = jobEntityRepository.getJobsWithDescriptionName(keywords[7]);
-        Long Java = jobEntityRepository.getJobsWithDescriptionName(keywords[8]);
-        Long RPA = jobEntityRepository.getJobsWithDescriptionName(keywords[9]);
-
-        Statistics jobDistributionStatistics = new Statistics("jobDistributionStatistics");
-        jobDistributionStatistics.setStatItems(List.of(new StatItem(keywords[0], backend),
-                new StatItem(keywords[1], frontEnd),
-                new StatItem(keywords[2], devOps),
-                new StatItem(keywords[3], IT),
-                new StatItem(keywords[4], Cloud),
-                new StatItem(keywords[5], CyberSecurity),
-                new StatItem(keywords[6], Manager),
-                new StatItem(keywords[7], UIUX),
-                new StatItem(keywords[8], Java),
-                new StatItem(keywords[9], RPA)));
-        statistics.add(jobDistributionStatistics);
-
-        //Get city distribution
-        Pageable pageable = PageRequest.of(0, 10);  // First page, limit 3 records
-        List<Object[]> results = jobEntityRepository.findTop3CitiesWithMostJobs(pageable);
-
-        if (results.isEmpty() || results.size() < 10)
-            throw new BadRequestException("Error getting city distribution statistics!");
-
-        Statistics cityDistributionStatistics = new Statistics("cityDistributionStatistics");
-        List<StatItem> cityDistributions = results.stream()
-                .map(result -> new StatItem((String) result[0], ((Long) result[1]).doubleValue())).toList();
-        cityDistributionStatistics.setStatItems(cityDistributions);
-        statistics.add(cityDistributionStatistics);
-
-        //Get company distribution
-        Pageable companyPageable = PageRequest.of(0, 10);  // First page, limit 5 records
-        List<Object[]> companyResults = jobEntityRepository.findCompaniesWithMostOpenJobs(companyPageable);
-
-        if (companyResults.isEmpty() || companyResults.size() < 10)
-            throw new BadRequestException("Error getting company distribution statistics!");
-
-        Statistics companyDistributionStatistics = new Statistics("companyDistributionStatistics");
-        List<StatItem> companyDistributions = companyResults.stream()
-                .map(result -> new StatItem((String) result[0], ((Long) result[1]).doubleValue())).toList();
-        companyDistributionStatistics.setStatItems(companyDistributions);
-        statistics.add(companyDistributionStatistics);
-
-        //Get position distribution
-        Pageable positionPageable = PageRequest.of(0, 10);
-        List<Object[]> positionResults = jobEntityRepository.findTopPositions(positionPageable);
-
-        if (positionResults.isEmpty() || positionResults.size() < 10)
-            throw new BadRequestException("Error getting Position distribution statistics!");
-
-        Statistics positionDistributionStatistics = new Statistics("positionDistributionStatistics");
-        List<StatItem> positionDistributions = positionResults.stream()
-                .map(result -> new StatItem((String) result[0], ((Long) result[1]).doubleValue())).toList();
-        positionDistributionStatistics.setStatItems(positionDistributions);
-        statistics.add(positionDistributionStatistics);
-
-        this.statistics = statistics;
+    @Override
+    public List<Statistics> getJobDistributionStatistics(Boolean getLive, LocalDateTime from, LocalDateTime to) {
+        if (getLive != null && getLive) {
+            return loadStatistics(from, to);
+        }
         return statistics;
     }
+
+    private List<Statistics> loadStatistics(LocalDateTime from, LocalDateTime to) {
+        List<Statistics> stats = new ArrayList<>();
+
+        if (jobEntityRepository.count() <= 0) return stats;
+
+        String[] keywords = {"Backend", "Frontend", "Devops", "IT", "Cloud", "CyberSecurity", "Manager", "UIUX", "Java", "RPA"};
+
+        List<StatItem> jobItems = new ArrayList<>();
+        for (String keyword : keywords) {
+            Long count = (from != null && to != null)
+                    ? jobEntityRepository.getJobsWithCrawledJobTitleName(keyword, from, to)
+                    : jobEntityRepository.countByCrawledJobTitleContainingIgnoreCase(keyword);
+            jobItems.add(new StatItem(keyword, count));
+        }
+
+        Statistics jobDistributionStatistics = new Statistics("jobDistributionStatistics");
+        jobDistributionStatistics.setStatItems(jobItems);
+        stats.add(jobDistributionStatistics);
+
+        // City distribution
+        Pageable pageable = PageRequest.of(0, 10);
+        List<Object[]> cityResults = jobEntityRepository.findTop3CitiesWithMostJobs(pageable);
+        if (cityResults.size() < 3) throw new BadRequestException("Error getting city distribution statistics!");
+
+        List<StatItem> cityItems = cityResults.stream()
+                .map(result -> new StatItem((String) result[0], ((Long) result[1]).doubleValue()))
+                .toList();
+
+        Statistics cityStats = new Statistics("cityDistributionStatistics");
+        cityStats.setStatItems(cityItems);
+        stats.add(cityStats);
+
+        // Company distribution
+        List<Object[]> companyResults = jobEntityRepository.findCompaniesWithMostOpenJobs(pageable);
+        if (companyResults.size() < 3) throw new BadRequestException("Error getting company distribution statistics!");
+
+        List<StatItem> companyItems = companyResults.stream()
+                .map(result -> new StatItem((String) result[0], ((Long) result[1]).doubleValue()))
+                .toList();
+
+        Statistics companyStats = new Statistics("companyDistributionStatistics");
+        companyStats.setStatItems(companyItems);
+        stats.add(companyStats);
+
+        // Position distribution
+        List<Object[]> positionResults = jobEntityRepository.findTopPositions(pageable);
+        if (positionResults.size() < 3) throw new BadRequestException("Error getting position distribution statistics!");
+
+        List<StatItem> positionItems = positionResults.stream()
+                .map(result -> new StatItem((String) result[0], ((Long) result[1]).doubleValue()))
+                .toList();
+
+        Statistics positionStats = new Statistics("positionDistributionStatistics");
+        positionStats.setStatItems(positionItems);
+        stats.add(positionStats);
+
+        return stats;
+    }
+
 }
