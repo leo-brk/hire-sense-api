@@ -1,5 +1,6 @@
 package com.boreksolutions.hiresenseapi.core.job;
 
+import com.boreksolutions.hiresenseapi.core.company.Company;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -7,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,8 +22,10 @@ public interface JobEntityRepository extends JpaRepository<JobEntity, Long> {
     @Query(value = "DELETE FROM job_entity; DELETE FROM company; DELETE FROM industry; DELETE FROM city; DELETE FROM country;", nativeQuery = true)
     void clearData();
 
-    @Query("SELECT COUNT(j) FROM JobEntity j WHERE LOWER(j.description) LIKE LOWER(CONCAT('%', :keyword, '%'))")
-    Long getJobsWithDescriptionName(@Param("keyword") String keyword);
+    @Query("SELECT COUNT(j) FROM JobEntity j WHERE LOWER(j.crawledJobTitle) LIKE LOWER(CONCAT('%', :keyword, '%')) " + "AND (:from IS NULL OR j.createdAt >= :from) " + "AND (:to IS NULL OR j.createdAt <= :to)")
+    Long getJobsWithCrawledJobTitleName(@Param("keyword") String keyword, @Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
+
+    Long countByCrawledJobTitleContainingIgnoreCase(String keyword);
 
 
     @Query("SELECT j.city.name, COUNT(j) AS jobCount FROM JobEntity j GROUP BY j.city ORDER BY jobCount DESC")
