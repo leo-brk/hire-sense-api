@@ -187,6 +187,19 @@ public class JobServiceImpl implements JobService {
         companyStats.setStatItems(companyItems);
         stats.add(companyStats);
 
+        // Industry distribution
+//        Pageable industryPageable = PageRequest.of(0, 10);
+        List<Object[]> industryResults = jobEntityRepository.findIndustriesWithMostOpenJobs(PageRequest.of(0, 10));
+        if (industryResults.isEmpty()) throw new BadRequestException("Error getting industry distribution statistics!");
+
+        List<StatItem> industryItems = industryResults.stream()
+                .map(result -> new StatItem((String) result[0], ((Long) result[1]).doubleValue()))
+                .toList();
+
+        Statistics industryStats = new Statistics("industryDistributionStatistics");
+        industryStats.setStatItems(industryItems);
+        stats.add(industryStats);
+
         // Position distribution
         List<Object[]> positionResults = jobEntityRepository.findTopPositions(pageable);
         if (positionResults.size() < 3) throw new BadRequestException("Error getting position distribution statistics!");
