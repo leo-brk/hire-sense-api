@@ -55,9 +55,9 @@ public class JobCriteriaBuilder {
 //            predicates.add(criteriaBuilder.equal(root.get("postedDate"), filter.getPostedDate()));
 //        }
 
-        if (filter.getCompanyId() != null) {
-            predicates.add(criteriaBuilder.equal(root.get("company").get("id"), filter.getCompanyId()));
-        }
+//        if (filter.getCompanyId() != null) {
+//            predicates.add(criteriaBuilder.equal(root.get("company").get("id"), filter.getCompanyId()));
+//        }
 
         if (filter.getCompanySize() != null) {
             predicates.add(criteriaBuilder.equal(root.get("company").get("companySize"), filter.getCompanySize()));
@@ -72,17 +72,34 @@ public class JobCriteriaBuilder {
                     "%" + filter.getPositionName().toLowerCase() + "%"));
         }
 
-        if (filter.getIndustryId() != null) {
-            predicates.add(criteriaBuilder.equal(root.get("industry").get("id"), filter.getIndustryId()));
+//        if (filter.getIndustryId() != null) {
+//            predicates.add(criteriaBuilder.equal(root.get("industry").get("id"), filter.getIndustryId()));
+//        }
+
+        if (filter.getCityId() != null && !filter.getCityId().isEmpty()) {
+            predicates.add(root.get("city").get("id").in(filter.getCityId()));
         }
 
-        if (filter.getCityId() != null) {
-            predicates.add(criteriaBuilder.equal(root.get("city").get("id"), filter.getCityId()));
+        if (filter.getIndustryId() != null && !filter.getIndustryId().isEmpty()) {
+            predicates.add(root.get("industry").get("id").in(filter.getIndustryId()));
         }
 
-        if (filter.getCountryId() != null) {
-            predicates.add(criteriaBuilder.equal(root.get("country").get("id"), filter.getCountryId()));
+        if (filter.getCountryId() != null && !filter.getCountryId().isEmpty()) {
+            predicates.add(root.get("country").get("id").in(filter.getCountryId()));
         }
+
+        if (filter.getCompanyId() != null && !filter.getCompanyId().isEmpty()) {
+            predicates.add(root.get("company").get("id").in(filter.getCompanyId()));
+        }
+
+
+//        if (filter.getCityId() != null) {
+//            predicates.add(criteriaBuilder.equal(root.get("city").get("id"), filter.getCityId()));
+//        }
+
+//        if (filter.getCountryId() != null) {
+//            predicates.add(criteriaBuilder.equal(root.get("country").get("id"), filter.getCountryId()));
+//        }
 
         predicates.add(criteriaBuilder.isNull(root.get("deletedAt")));
         criteriaQuery.where(criteriaBuilder.and(predicates.toArray(new Predicate[0])));
