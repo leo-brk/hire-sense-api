@@ -30,8 +30,14 @@ public class Company extends BaseEntity {
     @Column(name = "company_size")
     private String companySize;
 
+    @Column(name = "min_positions")
+    private Integer minPositions;
+
+    @Column(name = "max_positions")
+    private Integer maxPositions;
+
     @Column(name = "open_jobs_number")
-    private Integer openJobsNumber;
+    private String openJobsNumber;
 
     @ManyToOne
     @JoinColumn(name = "industry_id")

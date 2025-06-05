@@ -38,6 +38,10 @@ public class CompanyServiceImpl implements CompanyService {
         return companyRepository.save(company).getId();
     }
 
+    public Long count() {
+        return companyRepository.count();
+    }
+
     @Override
     public CompanyDto findCompanyById(Long id) {
         Company company = companyRepository.findById(id)
