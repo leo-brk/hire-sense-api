@@ -42,19 +42,19 @@ public class JobController {
 
     @GetMapping("/statistics")
     public ResponseEntity<List<Statistics>> getJobDistributionStatistics(
-        @RequestParam(required = false, name = "getLive") Boolean getLive,
-        @RequestParam(required = false, name = "fromDate")
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fromDate,
-        @RequestParam(required = false, name = "toDate")
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime toDate) {
+            @RequestParam(required = false, name = "getLive") Boolean getLive,
+            @RequestParam(required = false, name = "fromDate")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fromDate,
+            @RequestParam(required = false, name = "toDate")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime toDate) {
 
-    if (fromDate == null && toDate == null && getLive != null && getLive) {
-        fromDate = LocalDate.of(2022, 1, 1).atStartOfDay();
-        toDate = LocalDateTime.now();
+        if (fromDate == null && toDate == null && getLive != null && getLive) {
+            fromDate = LocalDate.of(2022, 1, 1).atStartOfDay();
+            toDate = LocalDateTime.now();
+        }
+
+        return ResponseEntity.ok(jobService.getJobDistributionStatistics(getLive, fromDate, toDate));
     }
-
-    return ResponseEntity.ok(jobService.getJobDistributionStatistics(getLive, fromDate, toDate));
-}
 
     @GetMapping("/count")
     public ResponseEntity<Long> count() {

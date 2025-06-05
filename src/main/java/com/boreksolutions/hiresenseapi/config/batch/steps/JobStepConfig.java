@@ -56,9 +56,11 @@ public class JobStepConfig {
             cityOptional.ifPresent(jobEntity::setCity);
 
             Optional<Industry> industryOptional = batchCacheService.findIndustryByName(fixItemName(item.getIndustry()));
-            industryOptional.ifPresent(jobEntity::setIndustry);
-
-            return jobEntity;
+            if (industryOptional.isPresent()) {
+                jobEntity.setIndustry(industryOptional.get());
+                return jobEntity;
+            }
+            else return null;
         };
     }
 

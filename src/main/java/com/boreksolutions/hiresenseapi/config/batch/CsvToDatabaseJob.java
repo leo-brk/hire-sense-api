@@ -80,7 +80,7 @@ public class CsvToDatabaseJob {
         return new JobBuilder("saveJobs", jobRepository)
                 .start(countryStep)
                 .next(cityStep)
-                .next(industryStep)
+                //.next(industryStep)
                 .next(companyStep)
                 .next(jobStep)
                 .listener(new JobCompletionNotificationListener())

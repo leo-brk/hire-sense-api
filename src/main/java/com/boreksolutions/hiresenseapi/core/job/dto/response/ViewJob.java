@@ -1,5 +1,6 @@
 package com.boreksolutions.hiresenseapi.core.job.dto.response;
 
+import com.boreksolutions.hiresenseapi.core.job.JobEntity;
 import com.boreksolutions.hiresenseapi.core.job.Type;
 import lombok.Data;
 
@@ -17,4 +18,8 @@ public class ViewJob {
     private String industry;
     private String company;
     private String city;
+
+    public static Object fromEntity(JobEntity jobEntity) {
+        return null;
+    }
 }

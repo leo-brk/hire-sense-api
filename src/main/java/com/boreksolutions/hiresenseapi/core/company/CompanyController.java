@@ -28,6 +28,11 @@ public class CompanyController {
         return ResponseEntity.ok(companyService.findCompanyById(id));
     }
 
+    @GetMapping("/count")
+    public ResponseEntity<Long> count() {
+        return ResponseEntity.ok(companyService.count());
+    }
+
     @PostMapping("/filter")
     public ResponseEntity<PageObject<CompanyDto>> getCompanies(@RequestBody CompanyFilter filter, Pageable pageable) {
         return ResponseEntity.ok(companyService.filter(filter, pageable));

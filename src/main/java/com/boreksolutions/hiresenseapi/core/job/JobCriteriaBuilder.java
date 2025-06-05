@@ -3,10 +3,7 @@ package com.boreksolutions.hiresenseapi.core.job;
 import com.boreksolutions.hiresenseapi.core.job.dto.request.JobFilter;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -60,43 +57,83 @@ public class JobCriteriaBuilder {
 //        }
 
         if (filter.getCompanySize() != null) {
-            predicates.add(criteriaBuilder.equal(root.get("company").get("companySize"), filter.getCompanySize()));
+            Path<Integer> minPositions = root.get("company").get("minPositions");
+            Path<Integer> maxPositions = root.get("company").get("maxPositions");
+
+            switch (filter.getCompanySize()) {
+                case "1-50":
+                    predicates.add(criteriaBuilder.and(
+                            criteriaBuilder.lessThanOrEqualTo(minPositions, 50),
+                            criteriaBuilder.greaterThanOrEqualTo(maxPositions, 1)
+                    ));
+                    break;
+                case "51-100":
+                    predicates.add(criteriaBuilder.and(
+                            criteriaBuilder.lessThanOrEqualTo(minPositions, 100),
+                            criteriaBuilder.greaterThanOrEqualTo(maxPositions, 51)
+                    ));
+                    break;
+                case "101-200":
+                    predicates.add(criteriaBuilder.and(
+                            criteriaBuilder.lessThanOrEqualTo(minPositions, 200),
+                            criteriaBuilder.greaterThanOrEqualTo(maxPositions, 101)
+                    ));
+                    break;
+                case "201+":
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(minPositions, 201));
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid company size range");
+            }
         }
 
-        if (filter.getOpenJobsNumber() != null) {
-            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("company").get("openJobsNumber"), filter.getOpenJobsNumber()));
-        }
-
-        if (filter.getPositionName() != null && !filter.getPositionName().isEmpty()) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("positionName")),
-                    "%" + filter.getPositionName().toLowerCase() + "%"));
-        }
+//        if (filter.getOpenJobsNumber() != null) {
+//            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("company").get("openJobsNumber"), filter.getOpenJobsNumber()));
+//        }
+//
+//        if (filter.getPositionName() != null && !filter.getPositionName().isEmpty()) {
+//            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("positionName")),
+//                    "%" + filter.getPositionName().toLowerCase() + "%"));
+//        }
 
 //        if (filter.getIndustryId() != null) {
 //            predicates.add(criteriaBuilder.equal(root.get("industry").get("id"), filter.getIndustryId()));
 //        }
-
-        if (filter.getCityId() != null && !filter.getCityId().isEmpty()) {
-            predicates.add(root.get("city").get("id").in(filter.getCityId()));
-        }
-
-        if (filter.getIndustryId() != null && !filter.getIndustryId().isEmpty()) {
-            predicates.add(root.get("industry").get("id").in(filter.getIndustryId()));
-        }
-
-        if (filter.getCountryId() != null && !filter.getCountryId().isEmpty()) {
-            predicates.add(root.get("country").get("id").in(filter.getCountryId()));
-        }
-
-        if (filter.getCompanyId() != null && !filter.getCompanyId().isEmpty()) {
-            predicates.add(root.get("company").get("id").in(filter.getCompanyId()));
-        }
-
-
+//
 //        if (filter.getCityId() != null) {
 //            predicates.add(criteriaBuilder.equal(root.get("city").get("id"), filter.getCityId()));
 //        }
 
+//         For Industry (name filter)
+        if (filter.getIndustryIds() != null && !filter.getIndustryIds().isEmpty()) {
+            predicates.add(root.get("industry").get("id").in(filter.getIndustryIds()));
+        }
+
+//      For Company (name filter)
+        if (filter.getCompanyIds() != null && !filter.getCompanyIds().isEmpty()) {
+            predicates.add(root.get("company").get("id").in(filter.getCompanyIds()));
+        }
+//      For City (name filter)
+        if (filter.getCityIds() != null && !filter.getCityIds().isEmpty()) {
+            predicates.add(root.get("city").get("id").in(filter.getCityIds()));
+        }
+
+        // For Country (name filter)
+        if (filter.getCountryIds() != null && !filter.getCountryIds().isEmpty()) {
+            predicates.add(root.get("country").get("id").in(filter.getCountryIds()));
+        }
+
+// Keep existing ID-based filters (for backward compatibility)
+//        if (filter.getIndustryId() != null) {
+//            predicates.add(criteriaBuilder.equal(root.get("industry").get("id"), filter.getIndustryId()));
+//        }
+//        if (filter.getCompanyId() != null) {
+//            predicates.add(criteriaBuilder.equal(root.get("company").get("id"), filter.getCompanyId()));
+//        }
+//        if (filter.getCityId() != null) {
+//            predicates.add(criteriaBuilder.equal(root.get("city").get("id"), filter.getCityId()));
+//        }
+//
 //        if (filter.getCountryId() != null) {
 //            predicates.add(criteriaBuilder.equal(root.get("country").get("id"), filter.getCountryId()));
 //        }

@@ -1,5 +1,6 @@
 package com.boreksolutions.hiresenseapi.common;
 
+import com.boreksolutions.hiresenseapi.core.job.dto.response.ViewJob;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,5 +31,8 @@ public class PageObject<T> {
         this.totalPages = page.getTotalPages();
         this.totalSize = page.getTotalElements();
         this.data = page.getContent();
+    }
+
+    public PageObject(List<ViewJob> viewJobs, long totalElements, int totalPages) {
     }
 }

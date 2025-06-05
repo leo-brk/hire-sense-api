@@ -43,8 +43,10 @@ public class CompanyStepConfig {
             Company company = new Company();
             company.setName(cleanedName);
             company.setCompanySize(item.getCompanySize());
-            company.setOpenJobsNumber(convertStringToInteger(item.getOpenJobsCount()));
-
+            int [] positionNumbers = getCompanySize(item.getCompanyName());
+            company.setMinPositions(positionNumbers[0]);
+            company.setMaxPositions(positionNumbers[1]);
+            company.setOpenJobsNumber(item.getOpenJobsCount());
             Optional<Industry> industryOptional = batchCacheService.findIndustryByName(fixItemName(item.getIndustry()));
             industryOptional.ifPresent(company::setIndustry);
 
@@ -52,6 +54,38 @@ public class CompanyStepConfig {
 
             return company;
         };
+    }
+
+    private int[] getCompanySize(String companySize) {
+        if (companySize == null || companySize.trim().isEmpty()) {
+            return new int[] {0, 0}; // or you can return null, depending on your preference
+        }
+
+        // Clean the input: keep only digits and dashes
+        String cleaned = companySize.replaceAll("[^0-9\\-]", "").trim();
+
+        if (cleaned.isEmpty()) {
+            return new int[] {0, 0};
+        }
+
+        // Check if it's a range (e.g., 100-200)
+        if (cleaned.contains("-")) {
+            String[] parts = cleaned.split("-");
+            try {
+                int min = Integer.parseInt(parts[0].trim());
+                int max = (parts.length > 1 && !parts[1].isEmpty()) ? Integer.parseInt(parts[1].trim()) : min;
+                return new int[] {min, max};
+            } catch (NumberFormatException e) {
+                return new int[] {0, 0}; // fallback if parsing fails
+            }
+        } else {
+            try {
+                int value = Integer.parseInt(cleaned);
+                return new int[] {value, value};
+            } catch (NumberFormatException e) {
+                return new int[] {0, 0};
+            }
+        }
     }
 
     @Bean

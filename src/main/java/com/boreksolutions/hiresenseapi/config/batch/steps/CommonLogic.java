@@ -51,7 +51,7 @@ public class CommonLogic {
         try {
             int cleanedInteger = Integer.parseInt(cleaned);
             if (cleanedInteger < 1) return null;
-            return cleanedInteger;
+            return Integer.valueOf(cleanedInteger);
         } catch (NumberFormatException e) {
             return null;
         }

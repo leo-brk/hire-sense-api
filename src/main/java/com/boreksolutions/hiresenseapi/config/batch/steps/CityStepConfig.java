@@ -35,7 +35,7 @@ public class CityStepConfig {
     public ItemProcessor<FullFileDto, City> cityItemProcessor() {
         return item -> {
             String cleanedCityName = fixItemName(item.getCity());
-
+//            cleanedCityName = cleanedCityName.charAt(0);
             return getCity(item, cleanedCityName, batchCacheService);
         };
     }

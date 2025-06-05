@@ -33,7 +33,7 @@ public class IndustryStepConfig {
             String cleanedName = fixItemName(item.getIndustry());
 
             if (cleanedName == null || batchCacheService.industryExists(cleanedName)) return null;
-
+            //me bo industrin mos me shtu hiq asnjo kur upload se i shtojm manualisht
             Industry industry = new Industry();
             industry.setName(cleanedName);
 

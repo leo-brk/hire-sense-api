@@ -16,5 +16,7 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     @Query("SELECT new Company(c.id, c.name) from Company c")
     List<Company> findAllWithPartialData();
 
+    long count();
+
     boolean existsByName(String name);
 }
