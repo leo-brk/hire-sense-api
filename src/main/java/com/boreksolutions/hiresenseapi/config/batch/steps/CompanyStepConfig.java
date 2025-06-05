@@ -12,14 +12,12 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.util.Optional;
 
-import static com.boreksolutions.hiresenseapi.config.batch.steps.CommonLogic.convertStringToInteger;
 import static com.boreksolutions.hiresenseapi.config.batch.steps.CommonLogic.fixItemName;
 
 @Configuration
