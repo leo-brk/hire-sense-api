@@ -38,6 +38,9 @@ public class CompanyCriteriaBuilder {
         if (filter.getNumberOfEmployees() > 0)
             predicates.add(criteriaBuilder.equal(root.get("numberOfEmployees"), filter.getNumberOfEmployees()));
 
+        if (filter.getCompany_size() > 0)
+            predicates.add(criteriaBuilder.equal(root.get("company_size"), filter.getCompany_size()));
+
         // Filter by open jobs number
         if (filter.getOpenJobsNumber() > 0)
             predicates.add(criteriaBuilder.equal(root.get("openJobsNumber"), filter.getOpenJobsNumber()));

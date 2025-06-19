@@ -21,6 +21,8 @@ public class CompanyDto {
 
     private Integer numberOfEmployees;
 
+    private int company_size;
+
     private Integer openJobsNumber;
 
     private IndustryDto industry; //needs to be added later

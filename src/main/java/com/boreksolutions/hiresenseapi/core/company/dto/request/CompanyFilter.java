@@ -9,6 +9,8 @@ public class CompanyFilter {
 
     private int numberOfEmployees;
 
+    private int company_size;
+
     private int openJobsNumber;
 
     private Long industryId;
